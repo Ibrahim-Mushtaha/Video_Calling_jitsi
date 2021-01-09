@@ -1,6 +1,7 @@
 package com.ix.ibrahim7.videocall.ui.fragment
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,10 +22,7 @@ class SigInFragment : Fragment() {
     private lateinit var mBinding: FragmentSignInBinding
 
     private val viewModel by lazy {
-        ViewModelProvider(
-            requireActivity(),
-            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
-        )[SignInAuthViewModel::class.java]
+        ViewModelProvider(this)[SignInAuthViewModel::class.java]
     }
 
 
@@ -33,9 +31,9 @@ class SigInFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mBinding = FragmentSignInBinding.inflate(inflater, container, false)
-            .apply { executePendingBindings() }
-
+        mBinding = FragmentSignInBinding.inflate(inflater, container, false).apply {
+            executePendingBindings()
+        }
         return mBinding.root
     }
 
@@ -43,21 +41,44 @@ class SigInFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        mBinding.apply {
 
-        mBinding.btnSignUp.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_sigInFragment_to_signUpFragment
-            )
+           btnSignUp.setOnClickListener {
+                findNavController().navigate(
+                    R.id.action_sigInFragment_to_signUpFragment
+                )
+            }
+            mBinding.btnSinIn.setOnClickListener {
+                val email = txtEmail.text.toString()
+                val password = txtPassword.text.toString()
+                when {
+                    TextUtils.isEmpty(txtEmail.text!!.toString()) -> {
+                        txtEmail.error =
+                            "Required field"
+                        txtEmail.requestFocus()
+                        return@setOnClickListener
+                    }
+                    TextUtils.isEmpty(txtPassword.text!!.toString()) -> {
+                        txtPassword.error =
+                            "Required field"
+                        txtPassword.requestFocus()
+                        return@setOnClickListener
+                    }
+                    else -> {
+                        showDialog(requireActivity())
+
+                        viewModel.signInWithEmailAndPassword(
+                            requireContext(),
+                            email = email,
+                            password = password
+                        )
+
+                    }
+                }
+
+            }
+
         }
-        mBinding.btnSinIn.setOnClickListener {
-            val email = mBinding.txtEmail.text.toString()
-            val password = mBinding.txtPassword.text.toString()
-         showDialog(requireActivity())
-
-            viewModel.signInWithEmailAndPassword(requireContext(),email = email, password = password)
-
-        }
-
         viewModel.getSignIn().observe(viewLifecycleOwner,Observer<Boolean>{
 
             val isSignI =
