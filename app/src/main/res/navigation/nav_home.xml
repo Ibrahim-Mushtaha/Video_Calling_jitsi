@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_home.xml"
+    app:startDestination="@id/sigInFragment">
+    <fragment
+        android:id="@+id/sigInFragment"
+        android:name="com.ix.ibrahim7.videocall.ui.fragment.SigInFragment"
+        android:label="SigInFragment">
+        <action
+            android:id="@+id/action_sigInFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_sigInFragment_to_userListFragment"
+            app:destination="@id/userListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.ix.ibrahim7.videocall.ui.fragment.SignUpFragment"
+        android:label="SignUpFragment" />
+    <fragment
+        android:id="@+id/userListFragment"
+        android:name="com.ix.ibrahim7.videocall.ui.fragment.UserListFragment"
+        android:label="UserListFragment">
+        <action
+            android:id="@+id/action_userListFragment_to_callFragment"
+            app:destination="@id/callFragment"
+         />
+        <action
+            android:id="@+id/action_userListFragment_to_outgoingInvitationFragment"
+            app:destination="@id/outgoingInvitationFragment"
+
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/callFragment"
+        android:name="com.ix.ibrahim7.videocall.ui.fragment.IncomingCallFragment"
+        android:label="CallFragment" />
+    <fragment
+        android:id="@+id/outgoingInvitationFragment"
+        android:name="com.ix.ibrahim7.videocall.ui.fragment.OutgoingInvitationFragment"
+        android:label="OutgoingInvitationFragment" />
+</navigation>
