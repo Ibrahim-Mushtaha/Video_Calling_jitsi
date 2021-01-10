@@ -1,11 +1,10 @@
-package com.ix.ibrahim7.videocall.ui.fragment
+package com.ix.ibrahim7.videocall.ui.fragment.auth
 
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -14,7 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.ix.ibrahim7.videocall.R
 import com.ix.ibrahim7.videocall.databinding.FragmentSignInBinding
 import com.ix.ibrahim7.videocall.util.Constant.SIGNIN
-import com.ix.ibrahim7.videocall.ui.viewmodel.SignInAuthViewModel
+import com.ix.ibrahim7.videocall.ui.viewmodel.auth.SignInViewModel
 import com.ix.ibrahim7.videocall.util.Constant.dialog
 import com.ix.ibrahim7.videocall.util.Constant.getSharePref
 import com.ix.ibrahim7.videocall.util.Constant.showDialog
@@ -24,12 +23,12 @@ class SigInFragment : Fragment() {
     private lateinit var mBinding: FragmentSignInBinding
 
     private val viewModel by lazy {
-        ViewModelProvider(this)[SignInAuthViewModel::class.java]
+        ViewModelProvider(this)[SignInViewModel::class.java]
     }
 
     override fun onStart() {
-        val isSignI = getSharePref(requireContext()).getBoolean(SIGNIN, false)
-        if (isSignI) findNavController().navigate(R.id.action_sigInFragment_to_userListFragment)
+        val isSign = getSharePref(requireContext()).getBoolean(SIGNIN, false)
+        if (isSign) findNavController().navigate(R.id.action_sigInFragment_to_userListFragment)
         super.onStart()
     }
 
@@ -39,7 +38,6 @@ class SigInFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         mBinding = FragmentSignInBinding.inflate(inflater, container, false).apply {
             executePendingBindings()
         }
@@ -57,7 +55,8 @@ class SigInFragment : Fragment() {
                     R.id.action_sigInFragment_to_signUpFragment
                 )
             }
-            mBinding.btnSinIn.setOnClickListener {
+
+            btnSinIn.setOnClickListener {
                 val email = txtEmail.text.toString()
                 val password = txtPassword.text.toString()
                 when {
@@ -81,7 +80,6 @@ class SigInFragment : Fragment() {
                             email = email,
                             password = password
                         )
-
                     }
                 }
 

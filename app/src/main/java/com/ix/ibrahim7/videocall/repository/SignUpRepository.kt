@@ -9,25 +9,10 @@ import com.ix.ibrahim7.videocall.util.Constant.USERS_COLLECTION
 import com.ix.ibrahim7.videocall.model.User
 
 
-class SignUpRepository private constructor(context: Context) {
+class SignUpRepository{
 
     private val sigUpLiveData = MutableLiveData<Boolean>()
 
-    companion object {
-        @Volatile
-        private var instance: SignUpRepository? = null
-        private val LOCK = Any()
-        operator fun invoke(context: Context) =
-            instance ?: synchronized(LOCK) {
-                instance ?: createRepository(context).also {
-                    instance = it
-                }
-            }
-
-        private fun createRepository(context: Context) =
-            SignUpRepository(context)
-
-    }
 
 
     fun createNewAccount(user: User) =

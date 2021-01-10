@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class CallingData(
+class NotificationData(
     val type: String = "",
     val invitation: String = "",
     val meetingType: String = "",

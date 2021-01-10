@@ -1,15 +1,14 @@
-package com.ix.ibrahim7.videocall.ui.viewmodel
+package com.ix.ibrahim7.videocall.ui.viewmodel.auth
 
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import com.ix.ibrahim7.videocall.repository.SignInRepository
 
-class SignInAuthViewModel(application: Application) : AndroidViewModel(application) {
+class SignInViewModel(application: Application) : AndroidViewModel(application) {
 
 
-    private val sigInRepository = SignInRepository(application.applicationContext)
-
+    private val sigInRepository = SignInRepository()
 
     fun signInWithEmailAndPassword(context: Context,email: String, password: String) =
         sigInRepository.signIn(context,email = email, password = password)

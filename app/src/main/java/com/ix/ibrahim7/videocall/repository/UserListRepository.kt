@@ -9,30 +9,13 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.ix.ibrahim7.videocall.util.Constant.USERS_COLLECTION
 import com.ix.ibrahim7.videocall.util.Constant.getUserProfile
 import com.ix.ibrahim7.videocall.model.User
+import com.ix.ibrahim7.videocall.util.Constant.TOKEN
 
-class MainUserListRepository private constructor(val context: Context) {
+class UserListRepository constructor(val context: Context) {
 
     private val updateLiveData = MutableLiveData<Boolean>()
-    val signInRepository = SignInRepository(context)
-
-    private val _getAllUserLiveData = MutableLiveData<List<User>>()
-    val getAllUserLiveData: LiveData<List<User>> = _getAllUserLiveData
-
-
-    companion object {
-        @Volatile
-        private var instance: MainUserListRepository? = null
-        private val LOCK = Any()
-        operator fun invoke(context: Context) =
-            instance ?: synchronized(LOCK) {
-                instance ?: createRepository(context).also {
-                    instance = it
-                }
-            }
-
-        private fun createRepository(context: Context) =
-            MainUserListRepository(context)
-    }
+    val signInRepository = SignInRepository()
+    val getAllUserLiveData = MutableLiveData<List<User>>()
 
 
     fun updateData(data: Map<String, Any>, id: String, onComplete: () -> Unit) = FirebaseFirestore
@@ -54,25 +37,24 @@ class MainUserListRepository private constructor(val context: Context) {
     fun getUpdateLiveData(): LiveData<Boolean> = updateLiveData
 
 
-    fun getTokenId(context: Context,onComplete: () -> Unit) {
+    fun updateUserToken(context: Context, onComplete: () -> Unit) {
         val user = getUserProfile(context)
-
         FirebaseMessaging.getInstance().token.addOnCompleteListener {
             if (it.isSuccessful) {
-                updateData(mapOf("token" to it.result.toString()), user.id) {
+                updateData(mapOf(TOKEN to it.result.toString()), user.id) {
                     signInRepository.getProfileData(context,user.id) {
                         onComplete()
                     }
                 }
             }
-
         }
+
     }
 
     fun logOut() {
         val user =
             getUserProfile(context)
-        updateData(mapOf("token" to " "), user.id) {
+        updateData(mapOf(TOKEN to " "), user.id) {
             FirebaseAuth.getInstance().signOut()
         }
     }
@@ -87,13 +69,12 @@ class MainUserListRepository private constructor(val context: Context) {
                 array.clear()
                 querySnapshot?.documents!!.forEach {
                     val item = it.toObject(User::class.java)
-
                     if (item!!.id != FirebaseAuth.getInstance().currentUser!!.uid)
                         array.add(item)
                 }
-                _getAllUserLiveData.value = array
+                getAllUserLiveData.value = array
             }
-
-
     }
+
+
 }

@@ -5,5 +5,5 @@
         android:id="@+id/logout"
         android:title="logout"
         android:icon="@drawable/ic_baseline_login_24"
-        app:showAsAction="always"/>
+        app:showAsAction="never"/>
 </menu>

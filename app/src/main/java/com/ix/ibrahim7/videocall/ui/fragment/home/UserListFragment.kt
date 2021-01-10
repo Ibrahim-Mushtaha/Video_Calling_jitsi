@@ -1,4 +1,4 @@
-package com.ix.ibrahim7.videocall.ui.fragment
+package com.ix.ibrahim7.videocall.ui.fragment.home
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -17,9 +17,9 @@ import com.ix.ibrahim7.videocall.R
 import com.ix.ibrahim7.videocall.adapter.UserListAdapter
 import com.ix.ibrahim7.videocall.databinding.FragmentUserListBinding
 import com.ix.ibrahim7.videocall.ui.activity.MainActivity
-import com.ix.ibrahim7.videocall.model.CallingData
+import com.ix.ibrahim7.videocall.model.NotificationData
 import com.ix.ibrahim7.videocall.model.User
-import com.ix.ibrahim7.videocall.ui.viewmodel.MainUserListViewModel
+import com.ix.ibrahim7.videocall.ui.viewmodel.home.UserListViewModel
 import com.ix.ibrahim7.videocall.util.Constant.CALL_AUDIO
 import com.ix.ibrahim7.videocall.util.Constant.CALL_VIDEO
 import com.ix.ibrahim7.videocall.util.Constant.DATA
@@ -39,7 +39,7 @@ class UserListFragment : Fragment(), UserListAdapter.onClick {
     private val viewModel by lazy {
         ViewModelProvider(
             requireActivity()
-        )[MainUserListViewModel::class.java]
+        )[UserListViewModel::class.java]
     }
 
     private lateinit var user: User
@@ -67,13 +67,13 @@ class UserListFragment : Fragment(), UserListAdapter.onClick {
             user = getUserProfile(requireContext())
         //    mBinding.txtNameUSer.text = user.name
         }
-        viewModel.getToken(requireContext()) {
+        viewModel.updateUserToken(requireContext()) {
 
         }
 
 
 
-        viewModel.getAllUserLiveData.observe(viewLifecycleOwner, Observer<List<User>> {
+        viewModel.UserLiveData.observe(viewLifecycleOwner, Observer<List<User>> {
             userAdapter.apply {
                 userList.clear()
                 userList.addAll(it)
@@ -130,7 +130,7 @@ class UserListFragment : Fragment(), UserListAdapter.onClick {
 
     private val invitationBroadcastManager = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            val type = intent!!.getParcelableExtra<CallingData>(DATA)
+            val type = intent!!.getParcelableExtra<NotificationData>(DATA)
             when (type!!.type) {
                 REMOTE_MSG_INVITATION -> {
                     findNavController().navigate(

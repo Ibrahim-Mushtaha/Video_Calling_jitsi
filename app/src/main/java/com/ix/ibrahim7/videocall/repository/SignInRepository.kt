@@ -12,25 +12,9 @@ import com.ix.ibrahim7.videocall.util.Constant.USER_PROFILE
 import com.ix.ibrahim7.videocall.util.Constant.editor
 import com.ix.ibrahim7.videocall.model.User
 
-class SignInRepository private constructor(context: Context) {
+class SignInRepository{
 
     private val sigInLiveData = MutableLiveData<Boolean>()
-
-    companion object {
-        @Volatile
-        private var instance: SignInRepository? = null
-        private val LOCK = Any()
-        operator fun invoke(context: Context) =
-            instance ?: synchronized(LOCK) {
-                instance ?: createRepository(context).also {
-                    instance = it
-                }
-            }
-
-        private fun createRepository(context: Context) =
-            SignInRepository(context)
-
-    }
 
     fun signIn(context: Context,email: String, password: String) =
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)

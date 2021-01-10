@@ -1,4 +1,4 @@
-package com.ix.ibrahim7.videocall.ui.fragment
+package com.ix.ibrahim7.videocall.ui.fragment.call
 
 import android.os.Bundle
 import android.util.Log
@@ -10,9 +10,8 @@ import androidx.navigation.fragment.findNavController
 import com.facebook.react.modules.core.PermissionListener
 import com.ix.ibrahim7.videocall.R
 import com.ix.ibrahim7.videocall.databinding.FragmentOutgoingInvitationBinding
-import com.ix.ibrahim7.videocall.model.CallingData
+import com.ix.ibrahim7.videocall.model.NotificationData
 import com.ix.ibrahim7.videocall.model.User
-import com.ix.ibrahim7.videocall.network.ApiClient
 import com.ix.ibrahim7.videocall.util.Constant.CALL_AUDIO
 import com.ix.ibrahim7.videocall.util.Constant.CALL_VIDEO
 import com.ix.ibrahim7.videocall.util.Constant.REMOTE_MSG_INVITATION
@@ -20,7 +19,7 @@ import com.ix.ibrahim7.videocall.util.Constant.REMOTE_INVITATION_CANCEL
 import com.ix.ibrahim7.videocall.util.Constant.TYPE_CALL
 import com.ix.ibrahim7.videocall.util.Constant.USER_DATA
 import com.ix.ibrahim7.videocall.util.Constant.getUserProfile
-import com.nurbk.ps.projectm.model.PushCalling
+import com.ix.ibrahim7.videocall.model.PushCalling
 import okhttp3.ResponseBody
 import org.jitsi.meet.sdk.*
 import retrofit2.Call
@@ -30,14 +29,15 @@ import java.net.URL
 import java.util.*
 
 
-class OutgoingInvitationFragment : Fragment(), JitsiMeetViewListener, JitsiMeetActivityInterface {
+class OutgoingCallFragment : Fragment() {
 
     private lateinit var mBinding: FragmentOutgoingInvitationBinding
     private lateinit var argumentData: Bundle
     private lateinit var user: User
     private var typeMeeting = CALL_VIDEO
     private var meetingRoom = ""
-    private var isAudio = false
+    private var isAudio = true
+    private var isRun = true
 
 
     private val userProfile by lazy {
@@ -70,80 +70,51 @@ class OutgoingInvitationFragment : Fragment(), JitsiMeetViewListener, JitsiMeetA
             typeMeeting = CALL_AUDIO
         }
         mBinding.btnCancelCall.setOnClickListener {
-            sendRemoteMessage(REMOTE_INVITATION_CANCEL)
+          //  sendRemoteMessage(REMOTE_INVITATION_CANCEL)
             findNavController().navigateUp()
         }
-        sendRemoteMessage(REMOTE_MSG_INVITATION)
+
+        if (isRun)
+            sendRemoteMessage(REMOTE_MSG_INVITATION)
 
     }
 
     private fun sendRemoteMessage(type: String) {
+
         meetingRoom = userProfile.id + "_" + UUID.randomUUID().toString().substring(0, 5)
 
         PushCalling(
-            CallingData(
+            data = NotificationData(
                 name = userProfile.name, meetingType = typeMeeting,
                 type = type, email = userProfile.email,
                 senderToken = userProfile.token,
                 receiverToken = user.token,
                 meetingRoom = meetingRoom
             ),
-            user.token
+            to = user.token
         ).also {
-            ApiClient(requireContext()).notificationInterface
-                .sendRemoteMessage(
-                    it
-                ).enqueue(object : Callback<ResponseBody> {
-                    override fun onResponse(
-                        call: Call<ResponseBody>,
-                        response: Response<ResponseBody>
-                    ) {
-                        if (response.isSuccessful){
-                            val options =
-                                JitsiMeetConferenceOptions.Builder()
-                                    .setServerURL(URL("https://meet.jit.si"))
-                                    .setRoom(meetingRoom)
-                                    .setAudioMuted(false)
-                                    .setVideoMuted(false)
-                                    .setAudioOnly(false)
-                                    .setWelcomePageEnabled(false)
-                                    .build()
-                            JitsiMeetActivity.launch(requireContext(),options)
-                        }
-                        else {
-                            Log.e("tttttttttttt", response.errorBody().toString())
+            PushCalling().Notification().sendNotification(requireContext(),it){msg,done->
+                if (done){
+                    try {
+                        Log.e("eee meet join", msg!!)
+                        val server = URL("https://meet.jit.si")
+                        val options = JitsiMeetConferenceOptions.Builder()
+                            .setServerURL(server)
+                            .setRoom(meetingRoom)
+                            .setWelcomePageEnabled(false)
+                            .setVideoMuted(isAudio)
+                            .build()
+                        isRun=false
+                        JitsiMeetActivity.launch(requireContext(), options)
 
-                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
-
-                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-
-                    }
-                })
+                }else{
+                    Log.e("eee fail", msg!!)
+                }
+            }
         }
-
-    }
-
-    override fun requestPermissions(p0: Array<out String>?, p1: Int, p2: PermissionListener?) {
-
-    }
-
-    override fun checkPermission(p0: String?, p1: Int, p2: Int): Int {
-       return  1
-    }
-
-    override fun checkSelfPermission(p0: String?): Int {
-        return  1
-    }
-
-    override fun onConferenceTerminated(p0: MutableMap<String, Any>?) {
-
-    }
-
-    override fun onConferenceJoined(p0: MutableMap<String, Any>?) {
-    }
-
-    override fun onConferenceWillJoin(p0: MutableMap<String, Any>?) {
 
     }
 

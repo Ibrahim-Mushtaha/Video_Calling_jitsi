@@ -1,14 +1,18 @@
 package com.ix.ibrahim7.videocall.network
 
 import android.content.Context
+import com.ix.ibrahim7.videocall.util.Constant.BaseUrl
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class ApiClient private constructor(context: Context) {
+class RetrofitInstance private constructor(context: Context) {
+
+    private var retrofit: Retrofit
+    lateinit var notificationApi: NotificationAPI
 
     companion object {
         @Volatile
-        private var instance: ApiClient? = null
+        private var instance: RetrofitInstance? = null
         private val LOCK = Any()
         operator fun invoke(context: Context) =
             instance ?: synchronized(LOCK) {
@@ -18,21 +22,17 @@ class ApiClient private constructor(context: Context) {
             }
 
         private fun createPreferences(context: Context) =
-            ApiClient(context)
+            RetrofitInstance(context)
 
     }
 
-    private val BASE_URL = "https://fcm.googleapis.com/fcm/"
-    private var retrofit: Retrofit
-    var notificationInterface: NotificationInterface
-
     init {
         retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BaseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        notificationInterface = retrofit.create(NotificationInterface::class.java)
+        notificationApi = retrofit.create(NotificationAPI::class.java)
 
     }
 

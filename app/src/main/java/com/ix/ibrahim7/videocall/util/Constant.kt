@@ -24,6 +24,11 @@ object Constant {
     const val REMOTE_INVITATION_ACCEPTED = "accepted"
     const val REMOTE_INVITATION_REJECTED = "rejected"
     const val REMOTE_INVITATION_CANCEL = "cancel"
+    const val AUTH_VALUE = "AAAAqliMt44:APA91bH2YO0hmWyQ6AF5vpbl49kKoioFdUEL-wDq_ISm07BoEH7metKL-k_OySRWonBBub81oItgrN409862YvIKwmEdJtTXBEIFBWnM2psaOgSaKnm2fGwSYtbMgnxTdHRwXjFHcI2P"
+    const val TOKEN = "token"
+    const val BaseUrl = "https://fcm.googleapis.com/"
+    const val MEETURL = "https://meet.jit.si"
+    const val MEETING_ROOM = "meetingRoom"
 
 
     fun getSharePref(context: Context) =

@@ -1,8 +1,8 @@
-package com.ix.ibrahim7.videocall.ui.viewmodel
+package com.ix.ibrahim7.videocall.ui.viewmodel.call
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import com.nurbk.ps.projectm.repository.IncomingCallRepository
+import com.ix.ibrahim7.videocall.repository.IncomingCallRepository
 
 class IncomingCallViewModel(application: Application) : AndroidViewModel(application) {
 

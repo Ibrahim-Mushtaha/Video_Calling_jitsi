@@ -7,7 +7,7 @@
 
         <variable
             name="data"
-            type="com.ix.ibrahim7.videocall.model.CallingData" />
+            type="com.ix.ibrahim7.videocall.model.NotificationData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

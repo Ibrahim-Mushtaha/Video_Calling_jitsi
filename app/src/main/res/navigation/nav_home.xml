@@ -6,7 +6,7 @@
     app:startDestination="@id/sigInFragment">
     <fragment
         android:id="@+id/sigInFragment"
-        android:name="com.ix.ibrahim7.videocall.ui.fragment.SigInFragment"
+        android:name="com.ix.ibrahim7.videocall.ui.fragment.auth.SigInFragment"
         android:label="SigInFragment">
         <action
             android:id="@+id/action_sigInFragment_to_signUpFragment"
@@ -17,11 +17,11 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.ix.ibrahim7.videocall.ui.fragment.SignUpFragment"
+        android:name="com.ix.ibrahim7.videocall.ui.fragment.auth.SignUpFragment"
         android:label="SignUpFragment" />
     <fragment
         android:id="@+id/userListFragment"
-        android:name="com.ix.ibrahim7.videocall.ui.fragment.UserListFragment"
+        android:name="com.ix.ibrahim7.videocall.ui.fragment.home.UserListFragment"
         android:label="UserListFragment">
         <action
             android:id="@+id/action_userListFragment_to_callFragment"
@@ -35,10 +35,10 @@
     </fragment>
     <fragment
         android:id="@+id/callFragment"
-        android:name="com.ix.ibrahim7.videocall.ui.fragment.IncomingCallFragment"
+        android:name="com.ix.ibrahim7.videocall.ui.fragment.call.IncomingCallFragment"
         android:label="CallFragment" />
     <fragment
         android:id="@+id/outgoingInvitationFragment"
-        android:name="com.ix.ibrahim7.videocall.ui.fragment.OutgoingInvitationFragment"
+        android:name="com.ix.ibrahim7.videocall.ui.fragment.call.OutgoingCallFragment"
         android:label="OutgoingInvitationFragment" />
 </navigation>
