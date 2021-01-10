@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.facebook.react.modules.core.PermissionListener
 import com.ix.ibrahim7.videocall.R
 import com.ix.ibrahim7.videocall.databinding.FragmentOutgoingInvitationBinding
 import com.ix.ibrahim7.videocall.model.NotificationData
@@ -15,16 +14,11 @@ import com.ix.ibrahim7.videocall.model.User
 import com.ix.ibrahim7.videocall.util.Constant.CALL_AUDIO
 import com.ix.ibrahim7.videocall.util.Constant.CALL_VIDEO
 import com.ix.ibrahim7.videocall.util.Constant.REMOTE_MSG_INVITATION
-import com.ix.ibrahim7.videocall.util.Constant.REMOTE_INVITATION_CANCEL
 import com.ix.ibrahim7.videocall.util.Constant.TYPE_CALL
 import com.ix.ibrahim7.videocall.util.Constant.USER_DATA
 import com.ix.ibrahim7.videocall.util.Constant.getUserProfile
 import com.ix.ibrahim7.videocall.model.PushCalling
-import okhttp3.ResponseBody
 import org.jitsi.meet.sdk.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.net.URL
 import java.util.*
 
@@ -66,7 +60,7 @@ class OutgoingCallFragment : Fragment() {
 
         if (argumentData.getString(TYPE_CALL) == CALL_AUDIO) {
             isAudio = true
-            mBinding.imageTypeCall.setImageResource(R.drawable.ic_baseline_call_24)
+            mBinding.imageTypeCall.setImageResource(R.drawable.ic_call)
             typeMeeting = CALL_AUDIO
         }
         mBinding.btnCancelCall.setOnClickListener {

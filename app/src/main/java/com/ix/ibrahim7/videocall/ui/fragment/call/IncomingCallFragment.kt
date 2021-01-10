@@ -15,13 +15,8 @@ import com.ix.ibrahim7.videocall.util.Constant.REMOTE_INVITATION_REJECTED
 import com.ix.ibrahim7.videocall.util.Constant.USER_DATA
 import com.ix.ibrahim7.videocall.model.NotificationData
 import com.ix.ibrahim7.videocall.model.PushCalling
-import com.ix.ibrahim7.videocall.network.RetrofitInstance
-import okhttp3.ResponseBody
 import org.jitsi.meet.sdk.JitsiMeetActivity
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.net.URL
 
 class IncomingCallFragment : Fragment() {
@@ -49,7 +44,7 @@ class IncomingCallFragment : Fragment() {
         mBinding.data = dataNotification
 
         if (dataNotification.meetingType == CALL_AUDIO) {
-            mBinding.imageTypeCall.setImageResource(R.drawable.ic_baseline_call_24)
+            mBinding.imageTypeCall.setImageResource(R.drawable.ic_call)
             isAudio = true
         }
 

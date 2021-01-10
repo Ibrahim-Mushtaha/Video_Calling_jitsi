@@ -20,10 +20,10 @@
             android:background="@drawable/bg_fragment_call" />
         <ImageView
             android:id="@+id/imageTypeCall"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_marginTop="32dp"
-            android:src="@drawable/ic_baseline_videocam_24"
+            android:src="@drawable/ic_videocam"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -47,7 +47,7 @@
             android:layout_width="100sp"
             android:layout_height="100sp"
             android:layout_marginTop="108dp"
-            android:background="@drawable/bg_letter"
+            android:background="@drawable/bg_textview_rounded_background"
             android:gravity="center"
             android:maxLength="1"
             android:maxLines="1"
@@ -73,7 +73,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtNameLetter"
-            tools:text="Noor Yasser" />
+            tools:text="Ibrahim Mushtaha" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnStartCall"
@@ -87,7 +87,7 @@
             app:layout_constraintEnd_toStartOf="@+id/btnFinshCall"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/ic_baseline_call_24" />
+            app:srcCompat="@drawable/ic_call" />
         <TextView
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
@@ -111,6 +111,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/btnStartCall"
-            app:srcCompat="@drawable/ic_baseline_call_end_24" />
+            app:srcCompat="@drawable/ic_call_end" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
