@@ -31,27 +31,28 @@ class MainActivity : AppCompatActivity() {
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
 
-        if (run)
-        if (intent.hasExtra("call"))
-            if (intent.extras!!.getInt("call",0) == 1){
-                val options =
-                    JitsiMeetConferenceOptions.Builder()
-                        .setServerURL(URL(MEETURL))
-                        .setRoom(intent.getStringExtra(MEETING_ROOM))
-                        .setAudioMuted(false)
-                        .setVideoMuted(false)
-                        .setAudioOnly(false)
-                        .setWelcomePageEnabled(false)
-                        .build()
-                intent.extras!!.remove("call")
-                run = false
-                JitsiMeetActivity.launch(this,options)
-            }
-
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment?
 
         val navController = navHostFragment!!.navController
+
+        if (run)
+        if (intent.hasExtra("call"))
+            if (intent.extras!!.getInt("call",0) == 1){
+                val bundle = Bundle().apply {
+                    putString(MEETING_ROOM,intent.getStringExtra(MEETING_ROOM))
+                }
+                val graph = navHostFragment.navController
+                    .navInflater.inflate(R.navigation.nav_home)
+                graph.startDestination = R.id.callFragment
+                navHostFragment.arguments = bundle
+                navHostFragment.navController.graph = graph
+
+                intent.extras!!.remove("call")
+                run = false
+            }
+
+
 
         val appBarConfiguration = AppBarConfiguration(setOf(
             R.id.userListFragment,R.id.sigInFragment,R.id.signUpFragment
@@ -64,7 +65,7 @@ class MainActivity : AppCompatActivity() {
 
         navHostFragment.navController.addOnDestinationChangedListener { _: NavController?, destination: NavDestination, arguments: Bundle? ->
             when (destination.id) {
-                R.id.sigInFragment, R.id.signUpFragment,R.id.outgoingInvitationFragment -> {
+                R.id.sigInFragment, R.id.signUpFragment,R.id.outgoingInvitationFragment,R.id.callFragment -> {
                     window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
                     mBinding.appbar.visibility = View.GONE
                 }

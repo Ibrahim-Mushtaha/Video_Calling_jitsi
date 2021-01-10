@@ -18,11 +18,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/bg_fragment_call" />
+
         <ImageView
             android:id="@+id/imageTypeCall"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="68dp"
             android:src="@drawable/ic_videocam"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
