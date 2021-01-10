@@ -6,9 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
-import com.ix.ibrahim7.videocall.util.Constant.COLLECTION_USERS
+import com.ix.ibrahim7.videocall.util.Constant.USERS_COLLECTION
 import com.ix.ibrahim7.videocall.util.Constant.getUserProfile
-import com.nurbk.ps.projectm.model.User
+import com.ix.ibrahim7.videocall.model.User
 
 class MainUserListRepository private constructor(val context: Context) {
 
@@ -37,7 +37,7 @@ class MainUserListRepository private constructor(val context: Context) {
 
     fun updateData(data: Map<String, Any>, id: String, onComplete: () -> Unit) = FirebaseFirestore
         .getInstance()
-        .collection(COLLECTION_USERS)
+        .collection(USERS_COLLECTION)
         .document(id)
         .update(
             data
@@ -82,7 +82,7 @@ class MainUserListRepository private constructor(val context: Context) {
         val array = ArrayList<User>()
         FirebaseFirestore
             .getInstance()
-            .collection(COLLECTION_USERS)
+            .collection(USERS_COLLECTION)
             .addSnapshotListener { querySnapshot, _ ->
                 array.clear()
                 querySnapshot?.documents!!.forEach {

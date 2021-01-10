@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.ix.ibrahim7.videocall.util.Constant.COLLECTION_USERS
-import com.nurbk.ps.projectm.model.User
+import com.ix.ibrahim7.videocall.util.Constant.USERS_COLLECTION
+import com.ix.ibrahim7.videocall.model.User
 
 
 class SignUpRepository private constructor(context: Context) {
@@ -62,7 +62,7 @@ class SignUpRepository private constructor(context: Context) {
 
     private fun insertUser(user: User) = FirebaseFirestore
         .getInstance()
-        .collection(COLLECTION_USERS)
+        .collection(USERS_COLLECTION)
         .document(user.id).set(user)
         .addOnCompleteListener {
             if (it.isSuccessful) {

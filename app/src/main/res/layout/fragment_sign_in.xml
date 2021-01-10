@@ -13,7 +13,7 @@
         android:background="@color/white">
 
         <ImageView
-            android:id="@+id/view"
+            android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@drawable/ic_header"
@@ -34,18 +34,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view">
+            app:layout_constraintTop_toBottomOf="@+id/image">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:src="@drawable/ic_blob"
-                app:layout_constraintBottom_toBottomOf="@+id/view"
+                app:layout_constraintBottom_toBottomOf="@+id/image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view" />
+                app:layout_constraintTop_toBottomOf="@+id/image" />
         </androidx.cardview.widget.CardView>
 
         <TextView
@@ -70,6 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="68dp"
             android:hint="email"
+            android:textColorHint="@color/black"
             app:boxStrokeColor="@color/box_input_text_color"
             app:hintTextColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
@@ -82,6 +83,8 @@
                 android:id="@+id/txtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,6 +95,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="password"
+            android:textColorHint="@color/black"
             app:boxStrokeColor="@color/box_input_text_color"
             app:hintTextColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
@@ -104,6 +108,8 @@
                 android:id="@+id/txtPassword"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -157,27 +163,6 @@
                 android:textSize="14sp" />
         </RelativeLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/login_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:backgroundTint="@color/blue_200"
-            android:text="login_with_facebock"
-            android:textAllCaps="false"
-            android:visibility="gone"
-            app:cornerRadius="8dp"
-            app:icon="@drawable/ic_baseline_facebook_24"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnSignUp" />
-
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/group2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:constraint_referenced_ids="btnSignUp,textView" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

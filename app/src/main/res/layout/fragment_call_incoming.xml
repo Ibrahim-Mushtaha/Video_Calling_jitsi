@@ -7,7 +7,7 @@
 
         <variable
             name="data"
-            type="com.nurbk.ps.projectm.model.CallingData" />
+            type="com.ix.ibrahim7.videocall.model.CallingData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

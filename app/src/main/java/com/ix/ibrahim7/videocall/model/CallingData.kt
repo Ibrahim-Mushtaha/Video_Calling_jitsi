@@ -1,4 +1,4 @@
-package com.nurbk.ps.projectm.model
+package com.ix.ibrahim7.videocall.model
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

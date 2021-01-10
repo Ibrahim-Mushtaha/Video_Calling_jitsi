@@ -6,12 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
-import com.ix.ibrahim7.videocall.util.Constant
-import com.ix.ibrahim7.videocall.util.Constant.COLLECTION_USERS
-import com.ix.ibrahim7.videocall.util.Constant.IS_SIGN_IN
-import com.ix.ibrahim7.videocall.util.Constant.USER_DATA_PROFILE
+import com.ix.ibrahim7.videocall.util.Constant.USERS_COLLECTION
+import com.ix.ibrahim7.videocall.util.Constant.SIGNIN
+import com.ix.ibrahim7.videocall.util.Constant.USER_PROFILE
 import com.ix.ibrahim7.videocall.util.Constant.editor
-import com.nurbk.ps.projectm.model.User
+import com.ix.ibrahim7.videocall.model.User
 
 class SignInRepository private constructor(context: Context) {
 
@@ -37,7 +36,7 @@ class SignInRepository private constructor(context: Context) {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    editor(context).putBoolean(IS_SIGN_IN, true).apply()
+                    editor(context).putBoolean(SIGNIN, true).apply()
                     getProfileData(context,FirebaseAuth.getInstance().currentUser!!.uid) {
                         sigInLiveData.postValue(true)
                     }
@@ -47,11 +46,11 @@ class SignInRepository private constructor(context: Context) {
             }
 
     fun getProfileData(context: Context, uid: String, onComplete: () -> Unit) =
-        FirebaseFirestore.getInstance().collection(COLLECTION_USERS)
+        FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
             .document(uid)
             .addSnapshotListener { querySnapshot, _ ->
                 val userString = Gson().toJson(querySnapshot!!.toObject(User::class.java))
-                editor(context)!!.putString(USER_DATA_PROFILE, userString).apply()
+                editor(context)!!.putString(USER_PROFILE, userString).apply()
                 onComplete()
             }
 

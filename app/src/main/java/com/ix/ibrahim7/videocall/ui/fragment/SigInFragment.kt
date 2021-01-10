@@ -5,16 +5,18 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.ix.ibrahim7.videocall.R
 import com.ix.ibrahim7.videocall.databinding.FragmentSignInBinding
-import com.ix.ibrahim7.videocall.util.Constant
-import com.ix.ibrahim7.videocall.util.Constant.IS_SIGN_IN
+import com.ix.ibrahim7.videocall.util.Constant.SIGNIN
 import com.ix.ibrahim7.videocall.ui.viewmodel.SignInAuthViewModel
 import com.ix.ibrahim7.videocall.util.Constant.dialog
+import com.ix.ibrahim7.videocall.util.Constant.getSharePref
 import com.ix.ibrahim7.videocall.util.Constant.showDialog
 
 class SigInFragment : Fragment() {
@@ -25,12 +27,19 @@ class SigInFragment : Fragment() {
         ViewModelProvider(this)[SignInAuthViewModel::class.java]
     }
 
+    override fun onStart() {
+        val isSignI = getSharePref(requireContext()).getBoolean(SIGNIN, false)
+        if (isSignI) findNavController().navigate(R.id.action_sigInFragment_to_userListFragment)
+        super.onStart()
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
         mBinding = FragmentSignInBinding.inflate(inflater, container, false).apply {
             executePendingBindings()
         }
@@ -43,7 +52,7 @@ class SigInFragment : Fragment() {
 
         mBinding.apply {
 
-           btnSignUp.setOnClickListener {
+            btnSignUp.setOnClickListener {
                 findNavController().navigate(
                     R.id.action_sigInFragment_to_signUpFragment
                 )
@@ -79,22 +88,22 @@ class SigInFragment : Fragment() {
             }
 
         }
-        viewModel.getSignIn().observe(viewLifecycleOwner,Observer<Boolean>{
 
-            val isSignI =
-               Constant.getSharePref(requireContext()).getBoolean(IS_SIGN_IN, false)
+        viewModel.getSignIn().observe(viewLifecycleOwner, Observer<Boolean> {
 
-            if (it) {
-                try {
-                    if (isSignI)
+            when (it) {
+                true -> {
                         findNavController().navigate(R.id.action_sigInFragment_to_userListFragment)
-                } catch (e: Exception) {
-                    e.printStackTrace()
                 }
+                else -> Snackbar.make(
+                    mBinding.root,
+                    "please try again later",
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
-           dialog.dismiss()
+            dialog.dismiss()
 
-    })
+        })
 
 
     }

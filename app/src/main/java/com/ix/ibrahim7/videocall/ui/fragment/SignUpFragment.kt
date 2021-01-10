@@ -10,10 +10,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.ix.ibrahim7.videocall.databinding.FragmentSignUpBinding
-import com.ix.ibrahim7.videocall.util.Constant
 import com.ix.ibrahim7.videocall.util.Constant.dialog
 import com.ix.ibrahim7.videocall.util.Constant.showDialog
-import com.nurbk.ps.projectm.model.User
+import com.ix.ibrahim7.videocall.model.User
 import com.nurbk.ps.projectm.ui.viewmodel.SignUpAuthViewModel
 
 class SignUpFragment : Fragment() {

@@ -6,44 +6,39 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 import com.ix.ibrahim7.videocall.R
 import com.ix.ibrahim7.videocall.adapter.UserListAdapter
 import com.ix.ibrahim7.videocall.databinding.FragmentUserListBinding
 import com.ix.ibrahim7.videocall.ui.activity.MainActivity
-import com.ix.ibrahim7.videocall.util.Constant
-import com.ix.ibrahim7.videocall.util.Constant.USER_DATA_PROFILE
-import com.ix.ibrahim7.videocall.util.Constant.getSharePref
-import com.nurbk.ps.projectm.model.CallingData
-import com.nurbk.ps.projectm.model.User
+import com.ix.ibrahim7.videocall.model.CallingData
+import com.ix.ibrahim7.videocall.model.User
 import com.ix.ibrahim7.videocall.ui.viewmodel.MainUserListViewModel
 import com.ix.ibrahim7.videocall.util.Constant.CALL_AUDIO
 import com.ix.ibrahim7.videocall.util.Constant.CALL_VIDEO
+import com.ix.ibrahim7.videocall.util.Constant.DATA
 import com.ix.ibrahim7.videocall.util.Constant.REMOTE_MSG_INVITATION
-import com.ix.ibrahim7.videocall.util.Constant.REMOTE_MSG_INVITATION_RESPONSE
+import com.ix.ibrahim7.videocall.util.Constant.REMOTE_INVITATION_RESPONSE
 import com.ix.ibrahim7.videocall.util.Constant.TYPE_CALL
 import com.ix.ibrahim7.videocall.util.Constant.USER_DATA
-import com.ix.ibrahim7.videocall.util.Constant.showDialog
+import com.ix.ibrahim7.videocall.util.Constant.editor
+import com.ix.ibrahim7.videocall.util.Constant.getUserProfile
 
 
-class UserListFragment : Fragment(), UserListAdapter.UserListener {
+class UserListFragment : Fragment(), UserListAdapter.onClick {
 
     private lateinit var mBinding: FragmentUserListBinding
 
 
     private val viewModel by lazy {
         ViewModelProvider(
-            requireActivity(),
-            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
+            requireActivity()
         )[MainUserListViewModel::class.java]
     }
 
@@ -57,6 +52,7 @@ class UserListFragment : Fragment(), UserListAdapter.UserListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        setHasOptionsMenu(true)
         mBinding = FragmentUserListBinding.inflate(inflater, container, false).apply {
             executePendingBindings()
         }
@@ -68,8 +64,8 @@ class UserListFragment : Fragment(), UserListAdapter.UserListener {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.getProfile(requireContext()) {
-            user = Gson().fromJson(Constant.getSharePref(requireContext())!!.getString(USER_DATA_PROFILE, ""), User::class.java)
-            mBinding.txtNameUSer.text = user.name
+            user = getUserProfile(requireContext())
+        //    mBinding.txtNameUSer.text = user.name
         }
         viewModel.getToken(requireContext()) {
 
@@ -77,19 +73,7 @@ class UserListFragment : Fragment(), UserListAdapter.UserListener {
 
 
 
-
-        mBinding.btnLogOut.setOnClickListener {
-         showDialog(requireActivity())
-            viewModel.getLogOut().also {
-                getSharePref(requireContext()).edit()!!.clear().clear().apply()
-                requireActivity().finish()
-                startActivity(Intent(requireContext(), MainActivity::class.java))
-            }
-        }
-
-
-
-        viewModel.getAllUserLiveData.observe(viewLifecycleOwner, Observer <List<User>>{
+        viewModel.getAllUserLiveData.observe(viewLifecycleOwner, Observer<List<User>> {
             userAdapter.apply {
                 userList.clear()
                 userList.addAll(it)
@@ -97,66 +81,56 @@ class UserListFragment : Fragment(), UserListAdapter.UserListener {
             }
         })
 
-        mBinding.rcDataList.adapter = userAdapter
+        mBinding.userList.adapter = userAdapter
 
-
-//        if (requireActivity().intent.getBooleanExtra("d", false)) {
-//            findNavController().navigate(
-//                R.id.action_userListFragment_to_callFragment,
-//                Bundle().apply {
-//                    putParcelable(
-//                        USER_DATA,
-//                        requireActivity().intent.getParcelableExtra<CallingData>("data")
-//                    )
-//                    putString(TYPE_CALL, CALL_AUDIO)
-//                })
-//
-//        }
     }
 
 
-    override fun initiateVideoMeeting(user: User) {
-        if (TextUtils.isEmpty(user.token)) {
-            Snackbar.make(
-                requireView(),
-                "${user.name} is not available for meeting",
-                Snackbar.LENGTH_LONG
-            ).show()
-        } else {
-            findNavController()
-                .navigate(
+    override fun startVideoMeeting(user: User) {
+        when{
+            TextUtils.isEmpty(user.token)->{
+                Snackbar.make(
+                    requireView(),
+                    "${user.name} is not available for meeting",
+                    Snackbar.LENGTH_LONG
+                ).show()
+            }
+            else->{
+                findNavController()
+                    .navigate(
+                        R.id.action_userListFragment_to_outgoingInvitationFragment,
+                        Bundle().apply {
+                            putParcelable(USER_DATA, user)
+                            putString(TYPE_CALL, CALL_VIDEO)
+                        })
+            }
+        }
+    }
+
+    override fun startVoiceMeeting(user: User) {
+        when {
+            TextUtils.isEmpty(user.token) -> {
+                Snackbar.make(
+                    requireView(),
+                    "${user.name} is not available for meeting",
+                    Snackbar.LENGTH_LONG
+                ).show()
+            }
+            else -> {
+                findNavController().navigate(
                     R.id.action_userListFragment_to_outgoingInvitationFragment,
                     Bundle().apply {
                         putParcelable(USER_DATA, user)
-                        putString(TYPE_CALL, CALL_VIDEO)
+                        putString(TYPE_CALL, CALL_AUDIO)
                     })
-
+            }
         }
-    }
-
-    override fun initiateAudioMeeting(user: User) {
-        if (TextUtils.isEmpty(user.token)) {
-            Snackbar.make(
-                requireView(),
-                "${user.name} is not available for meeting",
-                Snackbar.LENGTH_LONG
-            ).show()
-        } else {
-            findNavController().navigate(
-                R.id.action_userListFragment_to_outgoingInvitationFragment,
-                Bundle().apply {
-                    putParcelable(USER_DATA, user)
-                    putString(TYPE_CALL, CALL_AUDIO)
-                })
-
-        }
-
     }
 
 
     private val invitationBroadcastManager = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            val type = intent!!.getParcelableExtra<CallingData>("data")
+            val type = intent!!.getParcelableExtra<CallingData>(DATA)
             when (type!!.type) {
                 REMOTE_MSG_INVITATION -> {
                     findNavController().navigate(
@@ -173,12 +147,31 @@ class UserListFragment : Fragment(), UserListAdapter.UserListener {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.home_menu,menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.logout->{
+                viewModel.getLogOut().also {
+                    editor(requireContext())!!.clear().clear().apply()
+                    requireActivity().finish()
+                    startActivity(Intent(requireContext(), MainActivity::class.java))
+                    requireActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
     override fun onStart() {
         super.onStart()
         LocalBroadcastManager.getInstance(requireContext())
             .registerReceiver(
                 invitationBroadcastManager,
-                IntentFilter(REMOTE_MSG_INVITATION_RESPONSE)
+                IntentFilter(REMOTE_INVITATION_RESPONSE)
             )
     }
 

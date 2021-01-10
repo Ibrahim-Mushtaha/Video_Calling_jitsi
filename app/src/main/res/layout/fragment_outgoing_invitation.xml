@@ -7,7 +7,7 @@
 
         <variable
             name="user"
-            type="com.nurbk.ps.projectm.model.User" />
+            type="com.ix.ibrahim7.videocall.model.User" />
 
     </data>
 
