@@ -44,4 +44,5 @@
         android:id="@+id/outgoingCallFragment"
         android:name="com.ix.ibrahim7.videocall.ui.fragment.call.OutgoingCallFragment"
         android:label="outgoingCallFragment" />
+
 </navigation>

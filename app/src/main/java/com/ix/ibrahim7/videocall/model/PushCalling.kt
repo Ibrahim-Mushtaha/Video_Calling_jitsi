@@ -13,7 +13,7 @@ class PushCalling(
 ){
     constructor():this(null,"")
     inner class Notification{
-        fun sendNotification(context: Context,notification: PushCalling,onComplete: (msg:String?,done:Boolean) -> Unit) = CoroutineScope(Dispatchers.IO).launch {
+        fun sendMessage(context: Context, notification: PushCalling, onComplete: (msg:String?, done:Boolean) -> Unit) = CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = RetrofitInstance(context).notificationApi.sendRemoteMessage(notification)
                 if(response.isSuccessful) {

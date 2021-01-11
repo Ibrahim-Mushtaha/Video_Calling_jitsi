@@ -12,12 +12,17 @@ import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.google.gson.Gson
 import com.ix.ibrahim7.videocall.R
 import com.ix.ibrahim7.videocall.databinding.ActivityMainBinding
+import com.ix.ibrahim7.videocall.model.NotificationData
 import com.ix.ibrahim7.videocall.ui.viewmodel.home.UserViewModel
+import com.ix.ibrahim7.videocall.util.Constant
 import com.ix.ibrahim7.videocall.util.Constant.CALL
 import com.ix.ibrahim7.videocall.util.Constant.MEETING_ROOM
 import com.ix.ibrahim7.videocall.util.Constant.TYPE
+import com.ix.ibrahim7.videocall.util.Constant.USER_PROFILE
+import com.ix.ibrahim7.videocall.util.Constant.getSharePref
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,17 +31,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     lateinit var mBinding: ActivityMainBinding
-    private var run = true
 
 
     override fun onResume() {
+        if (getSharePref(this).getString(USER_PROFILE,"")!!.isNotEmpty())
         viewModel.updateUserStatus(this,true)
         super.onResume()
-    }
-
-    override fun onStart() {
-        viewModel.updateUserStatus(this,true)
-        super.onStart()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,25 +48,6 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment?
 
         val navController = navHostFragment!!.navController
-
-        if (run)
-        if (intent.hasExtra(CALL))
-            if (intent.extras!!.getInt(CALL,0) == 1){
-                val bundle = Bundle().apply {
-                    putString(MEETING_ROOM,intent.getStringExtra(MEETING_ROOM))
-                    putString(TYPE,intent.getStringExtra(TYPE))
-                }
-                val graph = navHostFragment.navController
-                    .navInflater.inflate(R.navigation.nav_main)
-                graph.startDestination = R.id.IncomingcallFragment
-                navHostFragment.arguments = bundle
-                navHostFragment.navController.graph = graph
-                Log.e("eee vide2",intent.getBooleanExtra(TYPE,false).toString())
-                intent.extras!!.remove(CALL)
-                run = false
-            }
-
-
 
         val appBarConfiguration = AppBarConfiguration(setOf(
             R.id.userListFragment,R.id.sigInFragment,R.id.signUpFragment
@@ -92,11 +73,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
+        if (getSharePref(this).getString(USER_PROFILE,"")!!.isNotEmpty())
         viewModel.updateUserStatus(this,false)
         super.onPause()
     }
 
     override fun onDestroy() {
+        if (getSharePref(this).getString(USER_PROFILE,"")!!.isNotEmpty())
         viewModel.updateUserStatus(this,false)
         super.onDestroy()
     }
