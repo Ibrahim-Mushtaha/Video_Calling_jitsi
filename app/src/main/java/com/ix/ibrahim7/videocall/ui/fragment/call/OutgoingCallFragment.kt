@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.findNavController
 import com.ix.ibrahim7.videocall.R
@@ -22,6 +23,7 @@ import com.ix.ibrahim7.videocall.util.Constant.TYPE_CALL
 import com.ix.ibrahim7.videocall.util.Constant.USER_DATA
 import com.ix.ibrahim7.videocall.util.Constant.getUserProfile
 import com.ix.ibrahim7.videocall.model.PushCalling
+import com.ix.ibrahim7.videocall.ui.viewmodel.call.CallViewModel
 import com.ix.ibrahim7.videocall.util.Constant
 import com.ix.ibrahim7.videocall.util.Constant.DATA
 import com.ix.ibrahim7.videocall.util.Constant.MEETURL
@@ -43,7 +45,10 @@ class OutgoingCallFragment : Fragment() {
     private var meetingType = CALL_VIDEO
     private var meetingRoom = ""
     private var isAudio = true
-    private var isRun = true
+
+    private val viewModel by lazy {
+        ViewModelProvider(this)[CallViewModel::class.java]
+    }
 
     private val getDetails by lazy {
         requireArguments()
@@ -69,70 +74,46 @@ class OutgoingCallFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         user = getDetails.getParcelable(USER_DATA)!!
         mBinding.user = user
-
+        meetingRoom = userProfile.id + "_" + UUID.randomUUID().toString().substring(0, 5)
 
         if (getDetails.getString(TYPE_CALL) == CALL_AUDIO) {
             isAudio = true
             mBinding.imageTypeCall.setImageResource(R.drawable.ic_call)
             meetingType = CALL_AUDIO
         } else
-            if (isRun)
-                sendRemoteMessage(REMOTE_MSG_INVITATION)
+                viewModel.sendRemoteMessage(requireContext(), NotificationData(
+                    name = userProfile.name, meetingType = meetingType,
+                    type = REMOTE_MSG_INVITATION, email = userProfile.email,
+                    senderToken = userProfile.token,
+                    receiverToken = user.token,
+                    meetingRoom = meetingRoom
+                ),
+                    REMOTE_MSG_INVITATION,user.token)
 
 
 
         mBinding.btnCancelCall.setOnClickListener {
-            sendRemoteMessage(REMOTE_MSG_INVITATION_CANCEL)
-            findNavController().navigateUp()
-        }
-
-    }
-
-    private fun sendRemoteMessage(type: String) {
-        meetingRoom = userProfile.id + "_" + UUID.randomUUID().toString().substring(0, 5)
-
-        PushCalling(
-            data = NotificationData(
+            viewModel.sendRemoteMessage(requireContext(), NotificationData(
                 name = userProfile.name, meetingType = meetingType,
-                type = type, email = userProfile.email,
+                type = REMOTE_MSG_INVITATION_CANCEL, email = userProfile.email,
                 senderToken = userProfile.token,
                 receiverToken = user.token,
                 meetingRoom = meetingRoom
             ),
-            to = user.token
-        ).also {
-            PushCalling().Notification().sendMessage(requireContext(), it) { msg, done ->
-                if (done) {
-                    try {
-                        Log.e("eee meet join", msg!!)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                } else {
-                    Log.e("eee fail", msg!!)
-                }
-            }
+                REMOTE_MSG_INVITATION_CANCEL,user.token)
+            findNavController().navigateUp()
         }
+
     }
 
 
     private val initBroadcastManager = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val type = intent!!.getParcelableExtra<NotificationData>("data")
-            Log.e("iiiii out",type.toString())
             when (type!!.type) {
                 REMOTE_MSG_INVITATION_ACCEPTED -> {
-
                     findNavController().navigateUp()
-                    val options = JitsiMeetConferenceOptions.Builder()
-                        .setServerURL(URL(MEETURL))
-                        .setRoom(meetingRoom)
-                        .setWelcomePageEnabled(false)
-                        .setVideoMuted(!isAudio)
-                        .build()
-                    isRun = false
-                    JitsiMeetActivity.launch(requireContext(), options)
-
+                    viewModel.startCalling(requireContext(),meetingRoom,!isAudio)
                 }
                 REMOTE_MSG_INVITATION_REJECTED -> {
                     findNavController().navigateUp()

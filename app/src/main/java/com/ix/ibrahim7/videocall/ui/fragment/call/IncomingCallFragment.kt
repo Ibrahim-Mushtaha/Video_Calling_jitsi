@@ -10,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -17,6 +19,7 @@ import com.ix.ibrahim7.videocall.R
 import com.ix.ibrahim7.videocall.databinding.FragmentIncomingCallBinding
 import com.ix.ibrahim7.videocall.model.NotificationData
 import com.ix.ibrahim7.videocall.model.PushCalling
+import com.ix.ibrahim7.videocall.ui.viewmodel.call.CallViewModel
 import com.ix.ibrahim7.videocall.util.Constant
 import com.ix.ibrahim7.videocall.util.Constant.DATA
 import com.ix.ibrahim7.videocall.util.Constant.MEETURL
@@ -41,12 +44,15 @@ class IncomingCallFragment : Fragment() {
 
     private lateinit var mBinding: FragmentIncomingCallBinding
     private lateinit var dataNotification: NotificationData
+    private var isAudio = false
 
     private val argumentData by lazy {
         requireArguments()
     }
 
-    private var isAudio = false
+    private val viewModel by lazy {
+        ViewModelProvider(this)[CallViewModel::class.java]
+    }
 
 
     override fun onStart() {
@@ -77,14 +83,35 @@ class IncomingCallFragment : Fragment() {
 
         isAudio = requireActivity().intent.getBooleanExtra(TYPE, false)
 
+        viewModel.CallLivedata.observe(viewLifecycleOwner, Observer {
+            if (it)
+                stopRingtone()
+            viewModel.startCalling(requireContext(),dataNotification.meetingRoom,isAudio)
+            findNavController().navigateUp()
+        })
+
         mBinding.btnFinshCall.setOnClickListener {
             stopRingtone()
-            sendRemoteMessage(false, REMOTE_MSG_INVITATION_REJECTED)
+            viewModel.sendRemoteMessage(requireContext(), NotificationData(
+                name = dataNotification.name, meetingType = dataNotification.meetingType,
+                type = REMOTE_MSG_INVITATION_REJECTED, email = dataNotification.email,
+                senderToken = dataNotification.receiverToken,
+                receiverToken = dataNotification.senderToken,
+                acceptedOrRejected = false
+            ),
+                REMOTE_MSG_INVITATION_REJECTED,dataNotification.senderToken)
             findNavController().navigateUp()
         }
 
         mBinding.btnStartCall.setOnClickListener {
-            sendRemoteMessage(true, REMOTE_MSG_INVITATION_ACCEPTED)
+            viewModel.sendRemoteMessage(requireContext(), NotificationData(
+                name = dataNotification.name, meetingType = dataNotification.meetingType,
+                type = REMOTE_MSG_INVITATION_ACCEPTED, email = dataNotification.email,
+                senderToken = dataNotification.receiverToken,
+                receiverToken = dataNotification.senderToken,
+                acceptedOrRejected = true
+            ),
+                REMOTE_MSG_INVITATION_ACCEPTED,dataNotification.senderToken)
             stopRingtone()
         }
 
@@ -104,42 +131,6 @@ class IncomingCallFragment : Fragment() {
         }
     }
 
-    private fun sendRemoteMessage(acceptOrReject: Boolean, type: String) {
-        PushCalling(
-            NotificationData(
-                name = dataNotification.name, meetingType = dataNotification.meetingType,
-                type = type, email = dataNotification.email,
-                senderToken = dataNotification.receiverToken,
-                receiverToken = dataNotification.senderToken,
-                acceptedOrRejected = acceptOrReject
-            ),
-            dataNotification.senderToken
-        ).also {
-            PushCalling().Notification().sendMessage(requireContext(), it) { msg, done ->
-                if (done) {
-                    try {
-                            if (type == REMOTE_MSG_INVITATION_ACCEPTED) {
-                                stopRingtone()
-                                val options = JitsiMeetConferenceOptions.Builder()
-                                    .setServerURL(URL(MEETURL))
-                                    .setRoom(dataNotification.meetingRoom)
-                                    .setWelcomePageEnabled(false)
-                                    .setVideoMuted(isAudio)
-                                    .build()
-                                JitsiMeetActivity.launch(requireContext(), options)
-                                findNavController().navigateUp()
-                            }
-
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                } else {
-                    Log.e("tttttttttttt", msg!!)
-                }
-            }
-        }
-
-    }
 
 
     override fun onStop() {
