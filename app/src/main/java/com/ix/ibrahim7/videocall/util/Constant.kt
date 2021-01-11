@@ -11,10 +11,11 @@ object Constant {
 
     const val SHARE = "Share"
     const val SIGNIN = "signIn"
-    const val USERS_COLLECTION = "User"
+    const val USERS = "User"
     const val USER_PROFILE = "userProfile"
     const val USER_DATA = "userData"
     const val TYPE_CALL = "typeCall"
+    const val TYPE = "type"
     const val CALL_VIDEO = "video"
     const val CALL_AUDIO = "audio"
     const val VALUE_TYPE = "application/json"
@@ -29,6 +30,8 @@ object Constant {
     const val BaseUrl = "https://fcm.googleapis.com/"
     const val MEETURL = "https://meet.jit.si"
     const val MEETING_ROOM = "meetingRoom"
+    const val CALL = "call"
+    const val USER_STATUS = "status"
 
 
     fun getSharePref(context: Context) =

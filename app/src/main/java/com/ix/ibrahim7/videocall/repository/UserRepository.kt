@@ -1,17 +1,17 @@
 package com.ix.ibrahim7.videocall.repository
 
 import android.content.Context
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
-import com.ix.ibrahim7.videocall.util.Constant.USERS_COLLECTION
+import com.ix.ibrahim7.videocall.util.Constant.USERS
 import com.ix.ibrahim7.videocall.util.Constant.getUserProfile
 import com.ix.ibrahim7.videocall.model.User
 import com.ix.ibrahim7.videocall.util.Constant.TOKEN
+import com.ix.ibrahim7.videocall.util.Constant.USER_STATUS
 
-class UserListRepository constructor(val context: Context) {
+class UserRepository constructor(val context: Context) {
 
     private val updateLiveData = MutableLiveData<Boolean>()
     val signInRepository = SignInRepository()
@@ -20,7 +20,7 @@ class UserListRepository constructor(val context: Context) {
 
     fun updateData(data: Map<String, Any>, id: String, onComplete: () -> Unit) = FirebaseFirestore
         .getInstance()
-        .collection(USERS_COLLECTION)
+        .collection(USERS)
         .document(id)
         .update(
             data
@@ -33,27 +33,28 @@ class UserListRepository constructor(val context: Context) {
             }
         }
 
-
-    fun getUpdateLiveData(): LiveData<Boolean> = updateLiveData
-
-
-    fun updateUserToken(context: Context, onComplete: () -> Unit) {
+    fun updateUserToken(context: Context) {
         val user = getUserProfile(context)
         FirebaseMessaging.getInstance().token.addOnCompleteListener {
             if (it.isSuccessful) {
                 updateData(mapOf(TOKEN to it.result.toString()), user.id) {
                     signInRepository.getProfileData(context,user.id) {
-                        onComplete()
                     }
                 }
             }
         }
+    }
 
+    fun updateUserStatus(context: Context,status:Boolean){
+        val user = getUserProfile(context)
+        updateData(mapOf(USER_STATUS to status), user.id) {
+            signInRepository.getProfileData(context,user.id) {
+            }
+        }
     }
 
     fun logOut() {
-        val user =
-            getUserProfile(context)
+        val user = getUserProfile(context)
         updateData(mapOf(TOKEN to " "), user.id) {
             FirebaseAuth.getInstance().signOut()
         }
@@ -62,10 +63,7 @@ class UserListRepository constructor(val context: Context) {
 
     fun getAllUser() {
         val array = ArrayList<User>()
-        FirebaseFirestore
-            .getInstance()
-            .collection(USERS_COLLECTION)
-            .addSnapshotListener { querySnapshot, _ ->
+        FirebaseFirestore.getInstance().collection(USERS).addSnapshotListener { querySnapshot, _ ->
                 array.clear()
                 querySnapshot?.documents!!.forEach {
                     val item = it.toObject(User::class.java)

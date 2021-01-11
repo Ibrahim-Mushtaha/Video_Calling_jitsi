@@ -10,15 +10,12 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.ix.ibrahim7.videocall.R
-import com.ix.ibrahim7.videocall.databinding.FragmentCallIncomingBinding
-import com.ix.ibrahim7.videocall.util.Constant.CALL_AUDIO
-import com.ix.ibrahim7.videocall.util.Constant.REMOTE_INVITATION_ACCEPTED
-import com.ix.ibrahim7.videocall.util.Constant.REMOTE_INVITATION_REJECTED
-import com.ix.ibrahim7.videocall.util.Constant.USER_DATA
+import com.ix.ibrahim7.videocall.databinding.FragmentIncomingCallBinding
 import com.ix.ibrahim7.videocall.model.NotificationData
 import com.ix.ibrahim7.videocall.model.PushCalling
 import com.ix.ibrahim7.videocall.util.Constant
 import com.ix.ibrahim7.videocall.util.Constant.MEETING_ROOM
+import com.ix.ibrahim7.videocall.util.Constant.TYPE
 import org.jitsi.meet.sdk.JitsiMeetActivity
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
 import org.jitsi.meet.sdk.JitsiMeetView
@@ -26,7 +23,7 @@ import java.net.URL
 
 class IncomingCallFragment : Fragment() {
 
-    private lateinit var mBinding: FragmentCallIncomingBinding
+    private lateinit var mBinding: FragmentIncomingCallBinding
     private lateinit var dataNotification: NotificationData;
     private val argumentData by lazy {
         requireArguments()
@@ -37,7 +34,7 @@ class IncomingCallFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        mBinding = FragmentCallIncomingBinding.inflate(inflater, container, false).apply {
+        mBinding = FragmentIncomingCallBinding.inflate(inflater, container, false).apply {
             executePendingBindings()
         }
         return mBinding.root
@@ -49,40 +46,32 @@ class IncomingCallFragment : Fragment() {
         val navHostFragment = requireActivity().supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment?
 
-        val navController = navHostFragment!!.navController
 
-     //   dataNotification = argumentData.getParcelable<NotificationData>(USER_DATA)!!
-      //  mBinding.data = dataNotification
-
-       /* if (dataNotification.meetingType == CALL_AUDIO) {
-            mBinding.imageTypeCall.setImageResource(R.drawable.ic_call)
-            isAudio = true
-        }*/
+        isAudio = requireActivity().intent.getBooleanExtra(TYPE, false)
 
         mBinding.btnFinshCall.setOnClickListener {
-            val graph = navHostFragment.navController
-                .navInflater.inflate(R.navigation.nav_home)
+            val graph = navHostFragment!!.navController
+                .navInflater.inflate(R.navigation.nav_main)
             graph.startDestination = R.id.userListFragment
             navHostFragment.navController.graph = graph
             findNavController().navigateUp()
         }
 
         mBinding.btnStartCall.setOnClickListener {
+            val graph = navHostFragment!!.navController
+                .navInflater.inflate(R.navigation.nav_main)
+            graph.startDestination = R.id.userListFragment
+            navHostFragment.navController.graph = graph
+
+            Log.e("eee video", requireActivity().intent.getBooleanExtra(TYPE, false).toString())
             val options =
                 JitsiMeetConferenceOptions.Builder()
                     .setServerURL(URL(Constant.MEETURL))
                     .setRoom(requireActivity().intent.getStringExtra(MEETING_ROOM))
-                    .setAudioMuted(false)
-                    .setVideoMuted(false)
-                    .setAudioOnly(false)
                     .setWelcomePageEnabled(false)
+                    .setVideoMuted(!isAudio)
                     .build()
-            JitsiMeetActivity.launch(requireContext(),options).also {
-                val graph = navHostFragment.navController
-                    .navInflater.inflate(R.navigation.nav_home)
-                graph.startDestination = R.id.userListFragment
-                navHostFragment.navController.graph = graph
-            }
+            JitsiMeetActivity.launch(requireContext(), options)
             //sendRemoteMessage(true, REMOTE_INVITATION_ACCEPTED)
         }
 
@@ -101,8 +90,8 @@ class IncomingCallFragment : Fragment() {
             ),
             dataNotification.senderToken
         ).also {
-            PushCalling().Notification().sendNotification(requireContext(),it){msg,done->
-                if (done){
+            PushCalling().Notification().sendNotification(requireContext(), it) { msg, done ->
+                if (done) {
                     try {
 
                         val server = URL("https://meet.jit.si")
@@ -118,7 +107,7 @@ class IncomingCallFragment : Fragment() {
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
-                }else{
+                } else {
                     Log.e("tttttttttttt", msg!!)
                 }
             }
@@ -126,7 +115,7 @@ class IncomingCallFragment : Fragment() {
 
     }
 
-    inner class jess(context: Context) :JitsiMeetView(context){
+    inner class jess(context: Context) : JitsiMeetView(context) {
         override fun leave() {
             super.leave()
         }

@@ -11,7 +11,7 @@ class SignInViewModel(application: Application) : AndroidViewModel(application) 
     private val sigInRepository = SignInRepository()
 
     fun signInWithEmailAndPassword(context: Context,email: String, password: String) =
-        sigInRepository.signIn(context,email = email, password = password)
+        sigInRepository.signIn(context,email,password)
 
     fun getSignIn() = sigInRepository.getSignIn()
 

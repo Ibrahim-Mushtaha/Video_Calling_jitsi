@@ -1,6 +1,5 @@
 package com.ix.ibrahim7.videocall.service
 
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -9,7 +8,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import com.ix.ibrahim7.videocall.BroadCast.NotificationReceiver
+import com.ix.ibrahim7.videocall.broadcast.NotificationReceiver
 import com.ix.ibrahim7.videocall.R
 
 class NotificationManager(var context: Context) {
