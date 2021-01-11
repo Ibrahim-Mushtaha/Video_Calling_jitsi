@@ -8,7 +8,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import androidx.core.app.NotificationCompat
-import com.ix.ibrahim7.videocall.broadcast.NotificationReceiver
 import com.ix.ibrahim7.videocall.R
 
 class NotificationManager(var context: Context) {
@@ -24,18 +23,6 @@ class NotificationManager(var context: Context) {
         )
 
 
-
-        val broadcastIntent = Intent(context, NotificationReceiver::class.java)
-        broadcastIntent.putExtra("messege",messageID)
-        broadcastIntent.putExtra("channelID",channelID)
-        val boradcastAction = PendingIntent.getBroadcast(
-            context,
-            0,
-            broadcastIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-
         val nBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
         val notification = nBuilder.setSmallIcon(R.mipmap.ic_launcher)
             .setContentIntent(pendingIntent)
@@ -44,7 +31,6 @@ class NotificationManager(var context: Context) {
             .setAutoCancel(true)
             .setColor(Color.BLUE)
             .setOnlyAlertOnce(true)
-            .addAction(R.mipmap.ic_launcher,"Make as Read",boradcastAction)
             .setPriority(NotificationManager.IMPORTANCE_DEFAULT).build()
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

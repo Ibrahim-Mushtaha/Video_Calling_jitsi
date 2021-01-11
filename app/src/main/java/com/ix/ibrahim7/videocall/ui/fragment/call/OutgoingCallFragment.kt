@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,19 +21,12 @@ import com.ix.ibrahim7.videocall.util.Constant.CALL_VIDEO
 import com.ix.ibrahim7.videocall.util.Constant.TYPE_CALL
 import com.ix.ibrahim7.videocall.util.Constant.USER_DATA
 import com.ix.ibrahim7.videocall.util.Constant.getUserProfile
-import com.ix.ibrahim7.videocall.model.PushCalling
 import com.ix.ibrahim7.videocall.ui.viewmodel.call.CallViewModel
-import com.ix.ibrahim7.videocall.util.Constant
-import com.ix.ibrahim7.videocall.util.Constant.DATA
-import com.ix.ibrahim7.videocall.util.Constant.MEETURL
-import com.ix.ibrahim7.videocall.util.Constant.NOTIFICATION_DATE
 import com.ix.ibrahim7.videocall.util.Constant.REMOTE_MSG_INVITATION
-import com.ix.ibrahim7.videocall.util.Constant.REMOTE_MSG_INVITATION_ACCEPTED
-import com.ix.ibrahim7.videocall.util.Constant.REMOTE_MSG_INVITATION_CANCEL
-import com.ix.ibrahim7.videocall.util.Constant.REMOTE_MSG_INVITATION_REJECTED
-import com.ix.ibrahim7.videocall.util.Constant.REMOTE_MSG_INVITATION_RESPONSE
-import org.jitsi.meet.sdk.*
-import java.net.URL
+import com.ix.ibrahim7.videocall.util.Constant.INVITATION_ACCEPTED
+import com.ix.ibrahim7.videocall.util.Constant.INVITATION_CANCEL
+import com.ix.ibrahim7.videocall.util.Constant.INVITATION_REJECTED
+import com.ix.ibrahim7.videocall.util.Constant.INVITATION_RESPONSE
 import java.util.*
 
 
@@ -87,20 +79,18 @@ class OutgoingCallFragment : Fragment() {
                     senderToken = userProfile.token,
                     receiverToken = user.token,
                     meetingRoom = meetingRoom
-                ),
-                    REMOTE_MSG_INVITATION,user.token)
+                ), REMOTE_MSG_INVITATION,user.token)
 
 
 
         mBinding.btnCancelCall.setOnClickListener {
             viewModel.sendRemoteMessage(requireContext(), NotificationData(
                 name = userProfile.name, meetingType = meetingType,
-                type = REMOTE_MSG_INVITATION_CANCEL, email = userProfile.email,
+                type = INVITATION_CANCEL, email = userProfile.email,
                 senderToken = userProfile.token,
                 receiverToken = user.token,
                 meetingRoom = meetingRoom
-            ),
-                REMOTE_MSG_INVITATION_CANCEL,user.token)
+            ), INVITATION_CANCEL,user.token)
             findNavController().navigateUp()
         }
 
@@ -111,14 +101,14 @@ class OutgoingCallFragment : Fragment() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val type = intent!!.getParcelableExtra<NotificationData>("data")
             when (type!!.type) {
-                REMOTE_MSG_INVITATION_ACCEPTED -> {
+                INVITATION_ACCEPTED -> {
                     findNavController().navigateUp()
                     viewModel.startCalling(requireContext(),meetingRoom,!isAudio)
                 }
-                REMOTE_MSG_INVITATION_REJECTED -> {
+                INVITATION_REJECTED -> {
                     findNavController().navigateUp()
                 }
-                REMOTE_MSG_INVITATION_CANCEL -> {
+                INVITATION_CANCEL -> {
                     findNavController().navigateUp()
                 }
             }
@@ -130,7 +120,7 @@ class OutgoingCallFragment : Fragment() {
         LocalBroadcastManager.getInstance(requireContext())
             .registerReceiver(
                 initBroadcastManager,
-                IntentFilter(REMOTE_MSG_INVITATION_RESPONSE)
+                IntentFilter(INVITATION_RESPONSE)
             )
     }
 

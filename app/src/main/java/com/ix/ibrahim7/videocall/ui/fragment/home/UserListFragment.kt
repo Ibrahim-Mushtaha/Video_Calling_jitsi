@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -24,7 +23,7 @@ import com.ix.ibrahim7.videocall.ui.viewmodel.home.UserViewModel
 import com.ix.ibrahim7.videocall.util.Constant.CALL_AUDIO
 import com.ix.ibrahim7.videocall.util.Constant.CALL_VIDEO
 import com.ix.ibrahim7.videocall.util.Constant.REMOTE_MSG_INVITATION
-import com.ix.ibrahim7.videocall.util.Constant.REMOTE_MSG_INVITATION_RESPONSE
+import com.ix.ibrahim7.videocall.util.Constant.INVITATION_RESPONSE
 import com.ix.ibrahim7.videocall.util.Constant.TYPE_CALL
 import com.ix.ibrahim7.videocall.util.Constant.USER_DATA
 import com.ix.ibrahim7.videocall.util.Constant.editor
@@ -173,7 +172,7 @@ class UserListFragment : Fragment(), UserAdapter.onClick {
         LocalBroadcastManager.getInstance(requireContext())
             .registerReceiver(
                 invitationBroadcastManager,
-                IntentFilter(REMOTE_MSG_INVITATION_RESPONSE)
+                IntentFilter(INVITATION_RESPONSE)
             )
     }
 

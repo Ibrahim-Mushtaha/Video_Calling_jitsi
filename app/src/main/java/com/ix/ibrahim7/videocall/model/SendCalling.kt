@@ -7,24 +7,30 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class PushCalling(
+class SendCalling(
     val data: NotificationData? = NotificationData(),
     val to: String
-){
-    constructor():this(null,"")
-    inner class Notification{
-        fun sendMessage(context: Context, notification: PushCalling, onComplete: (msg:String?, done:Boolean) -> Unit) = CoroutineScope(Dispatchers.IO).launch {
+) {
+    constructor() : this(null, "")
+
+    inner class Notification {
+        fun sendMessage(
+            context: Context,
+            notification: SendCalling,
+            onComplete: (msg: String?, done: Boolean) -> Unit
+        ) = CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = RetrofitInstance(context).notificationApi.sendRemoteMessage(notification)
-                if(response.isSuccessful) {
+                val response =
+                    RetrofitInstance(context).notificationApi.sendRemoteMessage(notification)
+                if (response.isSuccessful) {
                     Timber.e("eee send Response: Notification sended Successfuly")
-                    onComplete(response.body().toString(),true)
+                    onComplete(response.body().toString(), true)
                 } else {
                     Timber.e("eee send Response: Notification ${response.errorBody().toString()}")
-                    onComplete(response.errorBody().toString(),false)
+                    onComplete(response.errorBody().toString(), false)
                 }
-            } catch(e: Exception) {
-                onComplete(e.message.toString(),false)
+            } catch (e: Exception) {
+                onComplete(e.message.toString(), false)
                 Timber.e("eee send Response: Notification ${e.message.toString()}")
             }
         }

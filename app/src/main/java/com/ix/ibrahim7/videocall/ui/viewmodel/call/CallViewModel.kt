@@ -5,15 +5,12 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.navigation.fragment.findNavController
-import com.google.firebase.auth.FirebaseAuth
 import com.ix.ibrahim7.videocall.model.NotificationData
-import com.ix.ibrahim7.videocall.model.PushCalling
-import com.ix.ibrahim7.videocall.repository.UserRepository
+import com.ix.ibrahim7.videocall.model.SendCalling
 import com.ix.ibrahim7.videocall.util.Constant
 import com.ix.ibrahim7.videocall.util.Constant.REMOTE_MSG_INVITATION
-import com.ix.ibrahim7.videocall.util.Constant.REMOTE_MSG_INVITATION_ACCEPTED
-import com.ix.ibrahim7.videocall.util.Constant.REMOTE_MSG_INVITATION_CANCEL
+import com.ix.ibrahim7.videocall.util.Constant.INVITATION_ACCEPTED
+import com.ix.ibrahim7.videocall.util.Constant.INVITATION_CANCEL
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -39,15 +36,15 @@ class CallViewModel(application: Application) : AndroidViewModel(application) {
 
      fun sendRemoteMessage(context: Context,notificationData: NotificationData, type: String, messageTo:String){
          GlobalScope.launch (Dispatchers.IO) {
-             PushCalling(
+             SendCalling(
                  notificationData,
                  messageTo
              ).also {
-                 PushCalling().Notification().sendMessage(context, it) { msg, done ->
+                 SendCalling().Notification().sendMessage(context, it) { msg, done ->
                      if (done) {
                          try {
                              when(type){
-                                 REMOTE_MSG_INVITATION_ACCEPTED,REMOTE_MSG_INVITATION,REMOTE_MSG_INVITATION_CANCEL-> CallLivedata.postValue(true)
+                                 INVITATION_ACCEPTED,REMOTE_MSG_INVITATION,INVITATION_CANCEL-> CallLivedata.postValue(true)
                                  else-> CallLivedata.postValue(false)
                              }
 

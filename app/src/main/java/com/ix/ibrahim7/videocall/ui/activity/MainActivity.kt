@@ -12,15 +12,9 @@ import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.google.gson.Gson
 import com.ix.ibrahim7.videocall.R
 import com.ix.ibrahim7.videocall.databinding.ActivityMainBinding
-import com.ix.ibrahim7.videocall.model.NotificationData
 import com.ix.ibrahim7.videocall.ui.viewmodel.home.UserViewModel
-import com.ix.ibrahim7.videocall.util.Constant
-import com.ix.ibrahim7.videocall.util.Constant.CALL
-import com.ix.ibrahim7.videocall.util.Constant.MEETING_ROOM
-import com.ix.ibrahim7.videocall.util.Constant.TYPE
 import com.ix.ibrahim7.videocall.util.Constant.USER_PROFILE
 import com.ix.ibrahim7.videocall.util.Constant.getSharePref
 
