@@ -28,6 +28,10 @@ import com.ix.ibrahim7.videocall.util.Constant.TYPE_CALL
 import com.ix.ibrahim7.videocall.util.Constant.USER_DATA
 import com.ix.ibrahim7.videocall.util.Constant.editor
 import com.ix.ibrahim7.videocall.util.Constant.getUserProfile
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class UserListFragment : Fragment(), UserAdapter.onClick {
@@ -64,6 +68,7 @@ class UserListFragment : Fragment(), UserAdapter.onClick {
         viewModel.getProfile(requireContext()) {
             user = getUserProfile(requireContext())
         }
+
         viewModel.updateUserToken(requireContext())
 
 
@@ -159,9 +164,12 @@ class UserListFragment : Fragment(), UserAdapter.onClick {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.logout->{
-                viewModel.getLogOut().also {
+                GlobalScope.launch (Dispatchers.IO){
+                    viewModel.getLogOut()
+                    delay(500)
                     logout()
                 }
+
             }
         }
         return super.onOptionsItemSelected(item)

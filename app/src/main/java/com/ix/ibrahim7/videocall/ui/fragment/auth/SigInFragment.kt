@@ -26,11 +26,7 @@ class SigInFragment : Fragment() {
         ViewModelProvider(this)[SignInViewModel::class.java]
     }
 
-    override fun onStart() {
-        val isSign = getSharePref(requireContext()).getBoolean(SIGNIN, false)
-        if (isSign) findNavController().navigate(R.id.action_sigInFragment_to_userListFragment)
-        super.onStart()
-    }
+
 
 
     override fun onCreateView(

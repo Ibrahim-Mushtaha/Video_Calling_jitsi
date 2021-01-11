@@ -71,32 +71,36 @@ class IncomingCallFragment : Fragment() {
         viewModel.CallLivedata.observe(viewLifecycleOwner, Observer {
             if (it)
                 stopRingtone()
-            viewModel.startCalling(requireContext(),dataNotification.meetingRoom,isAudio)
+            viewModel.startCalling(requireContext(), dataNotification.meetingRoom, isAudio)
             findNavController().navigateUp()
         })
 
         mBinding.btnFinshCall.setOnClickListener {
             stopRingtone()
-            viewModel.sendRemoteMessage(requireContext(), NotificationData(
-                name = dataNotification.name, meetingType = dataNotification.meetingType,
-                type = INVITATION_REJECTED, email = dataNotification.email,
-                senderToken = dataNotification.receiverToken,
-                receiverToken = dataNotification.senderToken,
-                acceptedOrRejected = false
-            ),
-                INVITATION_REJECTED,dataNotification.senderToken)
+            viewModel.sendRemoteMessage(
+                requireContext(), NotificationData(
+                    name = dataNotification.name, meetingType = dataNotification.meetingType,
+                    type = INVITATION_REJECTED, email = dataNotification.email,
+                    senderToken = dataNotification.receiverToken,
+                    receiverToken = dataNotification.senderToken,
+                    acceptedOrRejected = false
+                ),
+                INVITATION_REJECTED, dataNotification.senderToken
+            )
             findNavController().navigateUp()
         }
 
         mBinding.btnStartCall.setOnClickListener {
-            viewModel.sendRemoteMessage(requireContext(), NotificationData(
-                name = dataNotification.name, meetingType = dataNotification.meetingType,
-                type = INVITATION_ACCEPTED, email = dataNotification.email,
-                senderToken = dataNotification.receiverToken,
-                receiverToken = dataNotification.senderToken,
-                acceptedOrRejected = true
-            ),
-                INVITATION_ACCEPTED,dataNotification.senderToken)
+            viewModel.sendRemoteMessage(
+                requireContext(), NotificationData(
+                    name = dataNotification.name, meetingType = dataNotification.meetingType,
+                    type = INVITATION_ACCEPTED, email = dataNotification.email,
+                    senderToken = dataNotification.receiverToken,
+                    receiverToken = dataNotification.senderToken,
+                    acceptedOrRejected = true
+                ),
+                INVITATION_ACCEPTED, dataNotification.senderToken
+            )
             stopRingtone()
         }
 
@@ -115,7 +119,6 @@ class IncomingCallFragment : Fragment() {
             }
         }
     }
-
 
 
     override fun onStop() {

@@ -11,6 +11,10 @@ import com.ix.ibrahim7.videocall.util.Constant.SIGNIN
 import com.ix.ibrahim7.videocall.util.Constant.USER_PROFILE
 import com.ix.ibrahim7.videocall.util.Constant.editor
 import com.ix.ibrahim7.videocall.model.User
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SignInRepository{
 
@@ -31,14 +35,18 @@ class SignInRepository{
                 }
             }
 
-    fun getProfileData(context: Context, uid: String, onComplete: () -> Unit) =
-        FirebaseFirestore.getInstance().collection(USERS)
-            .document(uid)
-            .addSnapshotListener { querySnapshot, _ ->
-                val userString = Gson().toJson(querySnapshot!!.toObject(User::class.java))
-                editor(context)!!.putString(USER_PROFILE, userString).apply()
-                onComplete()
-            }
+    fun getProfileData(context: Context, uid: String, onComplete: () -> Unit) {
+        GlobalScope.launch (Dispatchers.IO) {
+            FirebaseFirestore.getInstance().collection(USERS)
+                .document(uid)
+                .addSnapshotListener { querySnapshot, _ ->
+                    val userString = Gson().toJson(querySnapshot!!.toObject(User::class.java))
+                    editor(context)!!.putString(USER_PROFILE, userString).apply()
+                }
+            delay(1500)
+            onComplete()
+        }
+    }
 
 
 

@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var mBinding: ActivityMainBinding
 
-
     override fun onResume() {
         if (getSharePref(this).getString(USER_PROFILE,"")!!.isNotEmpty())
         viewModel.updateUserStatus(this,true)
@@ -54,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
         navHostFragment.navController.addOnDestinationChangedListener { _: NavController?, destination: NavDestination, arguments: Bundle? ->
             when (destination.id) {
-                R.id.sigInFragment, R.id.signUpFragment,R.id.outgoingCallFragment,R.id.IncomingcallFragment -> {
+                R.id.sigInFragment, R.id.signUpFragment,R.id.outgoingCallFragment,R.id.IncomingcallFragment,R.id.splashFragment -> {
                     window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
                     mBinding.appbar.visibility = View.GONE
                 }

@@ -2,8 +2,8 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_home.xml"
-    app:startDestination="@id/sigInFragment">
+    android:id="@+id/nav_main.xml"
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/sigInFragment"
@@ -25,7 +25,7 @@
     <fragment
         android:id="@+id/userListFragment"
         android:name="com.ix.ibrahim7.videocall.ui.fragment.home.UserListFragment"
-        android:label="UserFragment">
+        android:label="Chat">
         <action
             android:id="@+id/action_userListFragment_to_callFragment"
             app:destination="@id/IncomingcallFragment" />
@@ -44,5 +44,31 @@
         android:id="@+id/outgoingCallFragment"
         android:name="com.ix.ibrahim7.videocall.ui.fragment.call.OutgoingCallFragment"
         android:label="outgoingCallFragment" />
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.ix.ibrahim7.videocall.ui.fragment.auth.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splashFragment_to_sigInFragment"
+            app:destination="@id/sigInFragment"
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/slide_down"
+            app:launchSingleTop="true"
+            app:popEnterAnim="@anim/slide_up"
+            app:popExitAnim="@anim/slide_down"
+            app:popUpTo="@+id/nav_main"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_splashFragment_to_userListFragment"
+            app:destination="@id/userListFragment"
+            app:enterAnim="@anim/slide_up"
+            app:exitAnim="@anim/slide_down"
+            app:launchSingleTop="true"
+            app:popEnterAnim="@anim/slide_up"
+            app:popExitAnim="@anim/slide_down"
+            app:popUpTo="@+id/nav_main"
+            app:popUpToInclusive="true"/>
+    </fragment>
 
 </navigation>

@@ -5,6 +5,9 @@ import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.ix.ibrahim7.videocall.repository.UserRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class UserViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -23,5 +26,10 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         onComplete
     )
 
-    fun getAllUser() =  UserRepository.getAllUser()
+    fun getAllUser() {
+        GlobalScope.launch (Dispatchers.IO) {
+            UserRepository.getAllUser()
+        }
+    }
+
 }
