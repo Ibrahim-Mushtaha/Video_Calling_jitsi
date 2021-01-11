@@ -16,6 +16,8 @@ import com.ix.ibrahim7.videocall.model.PushCalling
 import com.ix.ibrahim7.videocall.util.Constant
 import com.ix.ibrahim7.videocall.util.Constant.MEETING_ROOM
 import com.ix.ibrahim7.videocall.util.Constant.TYPE
+import com.ix.ibrahim7.videocall.util.Constant.playrRingtone
+import com.ix.ibrahim7.videocall.util.Constant.stopRingtone
 import org.jitsi.meet.sdk.JitsiMeetActivity
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
 import org.jitsi.meet.sdk.JitsiMeetView
@@ -24,11 +26,17 @@ import java.net.URL
 class IncomingCallFragment : Fragment() {
 
     private lateinit var mBinding: FragmentIncomingCallBinding
-    private lateinit var dataNotification: NotificationData;
+    private lateinit var dataNotification: NotificationData
     private val argumentData by lazy {
         requireArguments()
     }
     private var isAudio = false
+
+
+    override fun onStart() {
+        playrRingtone(requireActivity())
+        super.onStart()
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,6 +58,7 @@ class IncomingCallFragment : Fragment() {
         isAudio = requireActivity().intent.getBooleanExtra(TYPE, false)
 
         mBinding.btnFinshCall.setOnClickListener {
+            stopRingtone()
             val graph = navHostFragment!!.navController
                 .navInflater.inflate(R.navigation.nav_main)
             graph.startDestination = R.id.userListFragment
@@ -58,6 +67,7 @@ class IncomingCallFragment : Fragment() {
         }
 
         mBinding.btnStartCall.setOnClickListener {
+            stopRingtone()
             val graph = navHostFragment!!.navController
                 .navInflater.inflate(R.navigation.nav_main)
             graph.startDestination = R.id.userListFragment

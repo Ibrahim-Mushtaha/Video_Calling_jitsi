@@ -3,9 +3,13 @@ package com.ix.ibrahim7.videocall.util
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.media.MediaPlayer
+import android.media.Ringtone
+import android.media.RingtoneManager
 import com.google.gson.Gson
 import com.ix.ibrahim7.videocall.R
 import com.ix.ibrahim7.videocall.model.User
+
 
 object Constant {
 
@@ -33,6 +37,7 @@ object Constant {
     const val CALL = "call"
     const val USER_STATUS = "status"
 
+    lateinit var ringtone: Ringtone
 
     fun getSharePref(context: Context) =
         context.getSharedPreferences(SHARE, Activity.MODE_PRIVATE)
@@ -51,5 +56,17 @@ object Constant {
 
     fun getUserProfile(context: Context): User =
         Gson().fromJson(getSharePref(context)!!.getString(USER_PROFILE, ""), User::class.java)
+
+
+    fun playrRingtone(context: Context){
+        val notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+        ringtone = RingtoneManager.getRingtone(context, notification)
+        ringtone.play()
+        ringtone.isLooping=true
+    }
+
+    fun stopRingtone(){
+        ringtone.stop()
+    }
 
 }
