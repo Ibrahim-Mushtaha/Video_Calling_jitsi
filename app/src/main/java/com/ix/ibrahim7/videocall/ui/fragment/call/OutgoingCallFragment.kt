@@ -70,27 +70,31 @@ class OutgoingCallFragment : Fragment() {
 
         if (getDetails.getString(TYPE_CALL) == CALL_AUDIO) {
             isAudio = true
-            mBinding.imageTypeCall.setImageResource(R.drawable.ic_call)
             meetingType = CALL_AUDIO
-        } else
-                viewModel.sendRemoteMessage(requireContext(), NotificationData(
-                    name = userProfile.name, meetingType = meetingType,
-                    type = REMOTE_MSG_INVITATION, email = userProfile.email,
-                    senderToken = userProfile.token,
-                    receiverToken = user.token,
-                    meetingRoom = meetingRoom
-                ), REMOTE_MSG_INVITATION,user.token)
+        }
+
+        viewModel.sendRemoteMessage(
+            requireContext(), NotificationData(
+                name = userProfile.name, meetingType = meetingType,
+                type = REMOTE_MSG_INVITATION, email = userProfile.email,
+                senderToken = userProfile.token,
+                receiverToken = user.token,
+                meetingRoom = meetingRoom
+            ), REMOTE_MSG_INVITATION, user.token
+        )
 
 
 
         mBinding.btnCancelCall.setOnClickListener {
-            viewModel.sendRemoteMessage(requireContext(), NotificationData(
-                name = userProfile.name, meetingType = meetingType,
-                type = INVITATION_CANCEL, email = userProfile.email,
-                senderToken = userProfile.token,
-                receiverToken = user.token,
-                meetingRoom = meetingRoom
-            ), INVITATION_CANCEL,user.token)
+            viewModel.sendRemoteMessage(
+                requireContext(), NotificationData(
+                    name = userProfile.name, meetingType = meetingType,
+                    type = INVITATION_CANCEL, email = userProfile.email,
+                    senderToken = userProfile.token,
+                    receiverToken = user.token,
+                    meetingRoom = meetingRoom
+                ), INVITATION_CANCEL, user.token
+            )
             findNavController().navigateUp()
         }
 
@@ -103,7 +107,7 @@ class OutgoingCallFragment : Fragment() {
             when (type!!.type) {
                 INVITATION_ACCEPTED -> {
                     findNavController().navigateUp()
-                    viewModel.startCalling(requireContext(),meetingRoom,!isAudio)
+                    viewModel.startCalling(requireContext(), meetingRoom, !isAudio)
                 }
                 INVITATION_REJECTED -> {
                     findNavController().navigateUp()
@@ -129,7 +133,6 @@ class OutgoingCallFragment : Fragment() {
         LocalBroadcastManager.getInstance(requireContext())
             .unregisterReceiver(initBroadcastManager)
     }
-
 
 
 }

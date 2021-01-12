@@ -15,40 +15,26 @@
         android:layout_height="match_parent">
 
         <View
+            android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/bg_fragment_call" />
 
-        <ImageView
-            android:id="@+id/imageTypeCall"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="68dp"
-            android:src="@drawable/ic_videocam"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="incoming_meeting_invitation"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageTypeCall" />
-
-        <TextView
+        <RelativeLayout
             android:id="@+id/txtNameLetter"
             android:layout_width="100sp"
             android:layout_height="100sp"
-            android:layout_marginTop="108dp"
+            android:layout_marginTop="164dp"
+            android:elevation="4dp"
             android:background="@drawable/bg_textview_rounded_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/view">
+        <TextView
+            android:id="@+id/txtName"
+            android:layout_width="100sp"
+            android:layout_height="100sp"
             android:gravity="center"
             android:maxLength="1"
             android:maxLines="1"
@@ -56,11 +42,8 @@
             android:textColor="@color/white"
             android:textSize="26dp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView5"
-            tools:text="N" />
+            tools:text="Image" />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/textView4"
@@ -76,42 +59,52 @@
             app:layout_constraintTop_toBottomOf="@+id/txtNameLetter"
             tools:text="Ibrahim Mushtaha" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+
+        <ImageButton
             android:id="@+id/btnStartCall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="64dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:background="@drawable/bg_textview_rounded_background"
             android:backgroundTint="@android:color/holo_green_dark"
-            android:clickable="true"
-            android:focusable="true"
+            style="@style/focusInClick"
+            android:elevation="4dp"
+            android:tint="@color/white"
+            android:src="@drawable/ic_call"
+            android:layout_marginBottom="64dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnFinshCall"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/ic_call" />
+            />
+
         <TextView
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@{data.email}"
-            android:textColor="@android:color/darker_gray"
+            android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+
+        <ImageButton
             android:id="@+id/btnFinshCall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="64dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:background="@drawable/bg_textview_rounded_background"
             android:backgroundTint="@android:color/holo_red_dark"
-            android:clickable="true"
-            android:focusable="true"
+            android:elevation="4dp"
+            style="@style/focusInClick"
+            android:tint="@color/white"
+            android:src="@drawable/ic_end_call"
+            android:layout_marginBottom="64dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/btnStartCall"
-            app:srcCompat="@drawable/ic_call_end" />
+            />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

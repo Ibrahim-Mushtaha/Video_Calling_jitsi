@@ -16,41 +16,18 @@
         android:layout_height="match_parent">
 
         <View
+            android:id="@+id/view2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/bg_fragment_call"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp" />
 
-        <ImageView
-            android:id="@+id/imageTypeCall"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="56dp"
-            android:src="@drawable/ic_videocam"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="send_meeting_invitation"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageTypeCall" />
-
         <TextView
             android:id="@+id/txtNameLetter"
             android:layout_width="100sp"
             android:layout_height="100dp"
-            android:layout_marginTop="108dp"
+            android:layout_marginTop="196dp"
             android:background="@drawable/bg_textview_rounded_background"
             android:gravity="center"
             android:maxLength="1"
@@ -62,7 +39,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView5"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="N" />
 
         <TextView
@@ -91,17 +68,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <ImageButton
             android:id="@+id/btnCancelCall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="64dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:background="@drawable/bg_textview_rounded_background"
             android:backgroundTint="@android:color/holo_red_dark"
-            android:clickable="true"
-            android:focusable="true"
+            android:elevation="4dp"
+            style="@style/focusInClick"
+            android:tint="@color/white"
+            android:layout_marginBottom="64dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/ic_call_end" />
+            app:srcCompat="@drawable/ic_end_call"
+            />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
