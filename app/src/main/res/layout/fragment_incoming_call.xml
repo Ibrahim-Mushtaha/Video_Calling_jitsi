@@ -4,10 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <variable
-            name="data"
-            type="com.ix.ibrahim7.videocall.model.NotificationData" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -38,7 +34,6 @@
             android:gravity="center"
             android:maxLength="1"
             android:maxLines="1"
-            android:text="@{data.name}"
             android:textColor="@color/white"
             android:textSize="26dp"
             android:textStyle="bold"
@@ -46,11 +41,10 @@
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/txtUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@{data.name}"
             android:textColor="@color/white"
             android:textSize="30dp"
             android:textStyle="bold"
@@ -78,16 +72,16 @@
             />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/txtEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@{data.email}"
+            tools:text="email"
             android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+            app:layout_constraintTop_toBottomOf="@+id/txtUserName" />
 
         <ImageButton
             android:id="@+id/btnFinshCall"

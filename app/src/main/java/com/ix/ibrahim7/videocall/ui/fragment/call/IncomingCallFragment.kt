@@ -32,7 +32,7 @@ class IncomingCallFragment : Fragment() {
     private var isAudio = false
 
     private val argumentData by lazy {
-        requireArguments()
+        requireArguments().getParcelable<NotificationData>(USER_DATA)!!
     }
 
     private val viewModel by lazy {
@@ -63,8 +63,12 @@ class IncomingCallFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        dataNotification = argumentData.getParcelable(USER_DATA)!!
-        mBinding.data = dataNotification
+        dataNotification = argumentData
+        mBinding.apply {
+            txtName.text=dataNotification.name
+            txtUserName.text=dataNotification.name
+            txtEmail.text=dataNotification.email
+        }
 
         isAudio = requireActivity().intent.getBooleanExtra(TYPE, false)
 

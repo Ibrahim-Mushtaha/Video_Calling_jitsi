@@ -5,10 +5,6 @@
 
     <data>
 
-        <variable
-            name="user"
-            type="com.ix.ibrahim7.videocall.model.User" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +20,7 @@
             tools:layout_editor_absoluteY="0dp" />
 
         <TextView
-            android:id="@+id/txtNameLetter"
+            android:id="@+id/txtName"
             android:layout_width="100sp"
             android:layout_height="100dp"
             android:layout_marginTop="196dp"
@@ -32,7 +28,6 @@
             android:gravity="center"
             android:maxLength="1"
             android:maxLines="1"
-            android:text="@{user.name}"
             android:textColor="@color/white"
             android:textSize="26sp"
             android:textStyle="bold"
@@ -43,30 +38,29 @@
             tools:text="N" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/txtUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@{user.name}"
             android:textColor="@color/white"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtNameLetter"
+            app:layout_constraintTop_toBottomOf="@+id/txtName"
             tools:text="Ibrahim Mushtaha" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/txtEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@{user.email}"
+            tools:text="email"
             android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+            app:layout_constraintTop_toBottomOf="@+id/txtUserName" />
 
         <ImageButton
             android:id="@+id/btnCancelCall"

@@ -36,7 +36,7 @@ class OutgoingCallFragment : Fragment() {
     private lateinit var user: User
     private var meetingType = CALL_VIDEO
     private var meetingRoom = ""
-    private var isAudio = true
+    private var isAudio = false
 
     private val viewModel by lazy {
         ViewModelProvider(this)[CallViewModel::class.java]
@@ -65,7 +65,11 @@ class OutgoingCallFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         user = getDetails.getParcelable(USER_DATA)!!
-        mBinding.user = user
+        mBinding.apply {
+            txtName.text=user.name
+            txtUserName.text=user.name
+            txtEmail.text=user.email
+        }
         meetingRoom = userProfile.id + "_" + UUID.randomUUID().toString().substring(0, 5)
 
         if (getDetails.getString(TYPE_CALL) == CALL_AUDIO) {
@@ -107,7 +111,7 @@ class OutgoingCallFragment : Fragment() {
             when (type!!.type) {
                 INVITATION_ACCEPTED -> {
                     findNavController().navigateUp()
-                    viewModel.startCalling(requireContext(), meetingRoom, !isAudio)
+                    viewModel.startCalling(requireContext(), meetingRoom, isAudio)
                 }
                 INVITATION_REJECTED -> {
                     findNavController().navigateUp()
