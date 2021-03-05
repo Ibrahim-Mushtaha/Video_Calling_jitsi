@@ -19,8 +19,7 @@ class MassagingService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
-        val dataJson =
-            Gson().toJson(message.data)
+        val dataJson = Gson().toJson(message.data)
         val data = Gson().fromJson(dataJson.toString(), NotificationData::class.java)
 
         val intents = Intent(INVITATION_RESPONSE)

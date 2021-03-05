@@ -7,12 +7,12 @@ import kotlinx.android.parcel.Parcelize
 class NotificationData(
     val receiverToken: String = "",
     val type: String = "",
-    val meetingType: String = "",
     val senderToken: String = "",
     val data: String = "",
     val name: String = "",
     val email: String = "",
     val meetingRoom: String = "",
+    val meetingType: String = "",
     val acceptedOrRejected: Boolean = false
 ) : Parcelable
 
